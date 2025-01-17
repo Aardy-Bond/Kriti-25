@@ -3,6 +3,7 @@ import { SignInBusiness } from "../../apis/contracts.js";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { Context } from "../../context/context.jsx";
+import CryptoJS from "crypto-js";
 
 const SignIn = ()=>{
 
@@ -17,6 +18,14 @@ const SignIn = ()=>{
     const handleChange = (e)=>{
         const { name, value } = e.target;
         setFormData((prevFormData) => ({...prevFormData,[name]: value}));
+    }
+
+    const [key,setKey] = useState("")
+
+    function handleDecrypt(data){
+        const bytes = CryptoJS.AES.decrypt(data,key);
+        const decryptedData= JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        return decryptedData
     }
 
     async function handleSubmit() {
@@ -39,7 +48,9 @@ const SignIn = ()=>{
                 },
             });
             console.log("Successfull",response.data.data);
-            setAccData(response.data.data);
+            const dataa = handleDecrypt(response.data.data)
+            setAccData(dataa);
+            console.log(dataa);
             navigate('/dashboard');
 
         } catch (error) {
@@ -57,6 +68,7 @@ const SignIn = ()=>{
             }}>
                 <input type="text" name="tokenId" placeholder="Enter your Token Id" onChange={handleChange} required/>
                 <input type="text" name="user" placeholder="Enter your Wallet Address" onChange={handleChange} required/>
+                <input type="text" name="private_key" placeholder="Enter your Password" onChange={(e)=>{setKey(e.target.value)}} required/>
                 <input type="submit" value="SignIn"/>
             </form>
         </>
