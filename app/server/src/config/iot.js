@@ -1,11 +1,12 @@
 import mqtt from 'mqtt'
+import keys from './env.js';
 
 const mqttOptions = {
-    host:process.env.MQTT_BROKER_HOSTNAME,
-    port:process.env.MQTT_BROKER_PORT,
+    host:keys.MQTT_BROKER_HOSTNAME,
+    port:keys.MQTT_BROKER_PORT,
     protocol:'mqtts',
-    username:process.env.MQTT_BROKER_USERNAME,
-    password:process.env.MQTT_BROKER_PASSWORD,
+    username:keys.MQTT_BROKER_USERNAME,
+    password:keys.MQTT_BROKER_PASSWORD,
     rejectedUnauthorized:true
 }
 const mqttClient = mqtt.connect(mqttOptions);
