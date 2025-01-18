@@ -51,7 +51,7 @@ void loop() {
   }
   client.loop();
   publishData();
-  delay(86400);
+  delay(3600);
 }
 
 void setup_wifi() {

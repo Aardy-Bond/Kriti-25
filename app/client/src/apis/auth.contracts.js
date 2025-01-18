@@ -1,9 +1,10 @@
 import Web3 from 'web3';
 import {nftContractAddress , NFT_ABI} from '../configs/constants.js'
 
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
+
 export const RegisterBusiness = async ({data , formData})=>{
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
     const uri = `ipfs://${data.cid}`;
     try {
         const gasLimit = BigInt(await contract.methods.registerBusiness(
@@ -11,7 +12,7 @@ export const RegisterBusiness = async ({data , formData})=>{
         ).estimateGas({
             from: formData.user
         }));
-        const bufferGasLimit = (gasLimit * 13n) / 10n;
+        const bufferGasLimit = (gasLimit*13n)/10n;
         let receipt = await contract.methods.registerBusiness(
             formData.user , formData.businessName , formData.sector , formData.country , uri , formData.yearOfEstablishment
         ).send({
@@ -31,8 +32,6 @@ export const RegisterBusiness = async ({data , formData})=>{
 }
 
 export const SignInBusiness = async({formData})=>{
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
     try {
         const gasLimit = BigInt(await contract.methods.verifyBusiness(
             formData.user ,formData.tokenId
