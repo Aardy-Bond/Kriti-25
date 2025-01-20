@@ -6,6 +6,7 @@ import Wallet from './components/wallet';
 import { Context } from './context/context';
 import SignIn from "./page/signin/index.jsx";
 import Dashboard from "./page/dashboard/index.jsx";
+import P2P from "./page/p2p/index.jsx";
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/sign-in" element={<SignIn/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/p2p" element={<P2P/>}/>
       </Routes>
       </BrowserRouter>
     </>

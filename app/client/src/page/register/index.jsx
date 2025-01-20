@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { RegisterBusiness } from "../../apis/contracts.js";
+import { RegisterBusiness } from "../../apis/auth.contracts.js";
 // import crypto from 'crypto-browserify';
 import CryptoJS from "crypto-js";
 // import { Buffer } from 'buffer';

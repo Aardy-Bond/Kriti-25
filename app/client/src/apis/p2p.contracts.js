@@ -1,0 +1,73 @@
+import Web3 from 'web3';
+import {nftContractAddress , NFT_ABI} from '../configs/constants.js'
+
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
+
+export const GetListings = async({address})=>{ //will be replaced by GraohQL
+    try {
+        const gasLimit = BigInt(await contract.methods.getListings().estimateGas({
+            from: address
+        }));
+    
+        console.log(gasLimit);
+        let listings = await contract.methods.getListings().call({
+            from: address,
+            gas:gasLimit.toString()
+        })
+        listings = JSON.stringify(listings , (key,value)=>{
+            typeof value === 'bigint'?Number(value):value
+        })
+        //this returns a map. we need to convert it to an array
+        console.log(`Transaction Successful\n${listings}`);
+        return listings;
+    } catch (error) {
+        console.log(`Transaction Unsuccessfull\n${error}`);
+        return false;
+    }
+}
+
+export const SellCredits = async({data,address})=>{
+    try {
+        const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).send({
+            from:address
+        }))
+        const bufferGasLimit = (gasLimit*13n)/10n;
+        let totalPrice = data.units * data.price;
+        let receipt = await contract.methods.list(data.price , data.units , totalPrice).send({
+            from:address,
+            gas:bufferGasLimit.toString()
+        })
+        receipt = JSON.stringify(listings , (key,value)=>{
+            typeof value === 'bigint'?Number(value):value;
+        })
+        console.log(`Transaction Successful\n${receipt}`);
+        return receipt;
+    } catch (error) {
+        console.log(`Transaction Unsuccessful\n${error}`);
+        return false;
+    }
+}
+
+export const BuyCredits = async ({listId,address,totalPrice}) =>{
+    try {
+        const gasLimit = BigInt(await contract.methods.purchase(listId).send({
+            from:address,
+            value:Web3.utils.toWei(totalPrice.toString(), "ether"),
+        }))
+        const bufferGasLimit=(gasLimit*13n)/10n;
+        let receipt = await contract.methods.purchase(listId).send({
+            from:address,
+            gas:bufferGasLimit.toString(),
+            value:Web3.utils.toWei(totalPrice.toString(), "ether"),
+        })
+        receipt = JSON.stringify(receipt,(key,value)=>{
+            typeof value === 'bigint'?Number(value):value
+        })
+        console.log(`Transaction Successful\n${receipt}`);
+        return receipt;
+    } catch (error) {
+        console.log(`Transaction Unsuccessfull\n${error}`);
+        return false;
+    }
+}
