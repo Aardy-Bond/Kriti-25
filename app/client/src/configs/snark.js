@@ -1,0 +1,43 @@
+// import {groth16} from 'snarkjs'
+const snarkjs = window.snarkjs;
+export const generateSellProof  = async({balance , units})=>{
+    try {
+        const input = {
+            balance:balance , credits:units
+        };
+        const wasmfile = 'http://localhost:8000/sell.wasm';
+        const zkeyfile = 'http://localhost:8000/sell.zkey';
+        const jsonfile = 'http://localhost:8000/sell_verification_key.json'
+        const {proof , publicSignals} = await snarkjs.groth16.fullProve(
+            input, wasmfile , zkeyfile //get these files from ipfs instead
+        );
+        const vKeyResponse = await fetch(jsonfile);
+        if (!vKeyResponse.ok) throw new Error(`Failed to fetch verification key: ${vKeyResponse.statusText}`);
+        const vKey = await vKeyResponse.json();
+        console.log(vKey);
+        const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+        console.log(res); //always giving true
+        return {proof , publicSignals};
+
+    } catch (error) {
+        console.log(`zk-buy generate proof failed\n${error}`);
+        return false;
+    }
+}
+
+export const generateBuyProof = async({balance , units , limit})=>{
+    try {
+        const input = {
+            balance:balance , limit:limit ,  creditBuy:units
+        };
+        const wasmfile = 'http://localhost:8000/buy.wasm';
+        const zkeyfile = 'http://localhost:8000/buy.zkey';
+        const {proof , publicSignals } = await snarkjs.groth16.fullProve(
+            input , wasmfile , zkeyfile
+        )
+        return {proof , publicSignals};
+    } catch (error) {
+        console.log(`zk-sell generate proof failed\n${error}`);
+        return false;
+    }
+}

@@ -799,3 +799,53 @@ export const NFT_ABI = [
 		"type": "function"
 	}
 ];
+export const zkSellContractAddress = "0x3605cEBaa49117423fd33923CB967B851970e1a2";
+export const ZK_SELL_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_verifierAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[2]",
+				"name": "proofA",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[2][2]",
+				"name": "proofB",
+				"type": "uint256[2][2]"
+			},
+			{
+				"internalType": "uint256[2]",
+				"name": "proofC",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[1]",
+				"name": "publicInputs",
+				"type": "uint256[1]"
+			}
+		],
+		"name": "validateUser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+export const zkBuyContractAddress ="";
+export const ZK_BUY_ABI =[]
