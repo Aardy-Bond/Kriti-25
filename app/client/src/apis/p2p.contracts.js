@@ -4,7 +4,7 @@ import {nftContractAddress , NFT_ABI} from '../configs/constants.js'
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
 
-export const GetListings = async({address})=>{ //will be replaced by GraohQL
+export const GetListings = async({address})=>{ //will be replaced by GraphQL
     try {
         const gasLimit = BigInt(await contract.methods.getListings().estimateGas({
             from: address
@@ -29,16 +29,17 @@ export const GetListings = async({address})=>{ //will be replaced by GraohQL
 
 export const SellCredits = async({data,address})=>{
     try {
+        const totalPrice = data.price*data.units
         const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address
         }))
+        console.log('error')
         const bufferGasLimit = (gasLimit*13n)/10n;
-        let totalPrice = data.units * data.price;
         let receipt = await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address,
             gas:bufferGasLimit.toString()
         })
-        receipt = JSON.stringify(listings , (key,value)=>{
+        receipt = JSON.stringify(receipt , (key,value)=>{
             typeof value === 'bigint'?Number(value):value;
         })
         console.log(`Transaction Successful\n${receipt}`);

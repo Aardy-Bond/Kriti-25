@@ -40,7 +40,7 @@ const P2P = ()=>{
             pi_b:[res.proof.pi_b[0],res.proof.pi_b[1]],
             pi_c:[res.proof.pi_c[0],res.proof.pi_c[1]],
         }
-        res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],callback:SubmitSellProof});
+        res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],action:'buy'});
         if(!res) return;
         res = await BuyCredits({listId,address:accData.user});
         if(!res) return;
@@ -56,15 +56,17 @@ const P2P = ()=>{
             pi_b:[res.proof.pi_b[0],res.proof.pi_b[1]],
             pi_c:[res.proof.pi_c[0],res.proof.pi_c[1]],
         }
-        res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],callback:SubmitBuyProof});
+        res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],action:'sell'});
         if(!res) return;
         res = await SellCredits({data:formData,address:accData.user});
-        if(!res) return
+        if(!res) return;
     }
 
-    const submitProof =async({proof , publicInputs , callback}) =>{
+    const submitProof =async({proof , publicInputs , action}) =>{
         try {
-            const transaction = await callback({proof,publicInputs});
+            let transaction ;
+            if(action == 'sell') transaction = await SubmitSellProof({proof,publicInputs});
+            else transaction = await SubmitBuyProof({proof , publicInputs});
             if(!transaction) throw new Error('Some Error occured');
             return true;
        } catch (error) {
