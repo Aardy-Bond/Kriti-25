@@ -1,4 +1,4 @@
-export const nftContractAddress = "0x62A54EBb62263AE1eb01e5f22DdAe120807B2833"; // to be changed
+export const nftContractAddress = "0xab3db1f902fdbf2249b06e586797f13b65c8c4c4";
 export const NFT_ABI = [
 	{
 		"inputs": [],
@@ -749,6 +749,24 @@ export const NFT_ABI = [
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "newUri",
+				"type": "string"
+			}
+		],
+		"name": "updateUri",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			}
 		],
 		"name": "uri",
@@ -765,11 +783,6 @@ export const NFT_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
@@ -784,6 +797,46 @@ export const NFT_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	}
+]
+export const iotContractAddress = "0xe0b5709dd00984cb0438183c81ea612b948b6c62";
+export const IOT_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_identifier",
+				"type": "string"
+			}
+		],
+		"name": "getByIdentifier",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_credits",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_identifier",
+				"type": "string"
+			}
+		],
+		"name": "updateCredits",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
@@ -824,6 +877,43 @@ export const ZK_SELL_ABI = [
 			}
 		],
 		"name": "validateUser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+export const zkBuyContractAddress = "0x214fb5f32DBc79433e06897aa9F31F4C771150C9";
+export const ZK_BUY_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[2]",
+				"name": "_pA",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[2][2]",
+				"name": "_pB",
+				"type": "uint256[2][2]"
+			},
+			{
+				"internalType": "uint256[2]",
+				"name": "_pC",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[1]",
+				"name": "_pubSignals",
+				"type": "uint256[1]"
+			}
+		],
+		"name": "verifyProof",
 		"outputs": [
 			{
 				"internalType": "bool",

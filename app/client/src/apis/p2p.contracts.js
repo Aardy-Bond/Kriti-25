@@ -33,7 +33,6 @@ export const SellCredits = async({data,address})=>{
         const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address
         }))
-        console.log('error')
         const bufferGasLimit = (gasLimit*13n)/10n;
         let receipt = await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address,

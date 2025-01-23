@@ -30,8 +30,8 @@ const SignIn = ()=>{
 
     async function handleSubmit() {
         try {
-            if(!formData.tokenId || !formData.user.trim()) return;
-            const transaction = await SignInBusiness({formData:formData});
+            if(!formData.tokenId) return;
+            const transaction = await SignInBusiness(formData.tokenId);
             if(!transaction) {
                 alert('Could not Sign-in');
                 return;
