@@ -30,8 +30,8 @@ const SignIn = ()=>{
 
     async function handleSubmit() {
         try {
-            if(!formData.tokenId || !formData.user.trim()) return;
-            const transaction = await SignInBusiness({formData:formData});
+            if(!formData.tokenId) return;
+            const transaction = await SignInBusiness({formData});
             if(!transaction) {
                 alert('Could not Sign-in');
                 return;
@@ -47,12 +47,9 @@ const SignIn = ()=>{
                     'Content-Type': 'application/json',
                 },
             });
-            console.log("Successfull",response.data.data);
-            const dataa = handleDecrypt(response.data.data)
-            setAccData({...dataa , tokenId:formData.tokenId});
-            console.log(dataa);
+            const dataa = handleDecrypt(response.data.data.data)
+            setAccData({...dataa , tokenId:formData.tokenId , key:key});
             navigate('/dashboard');
-
         } catch (error) {
             alert(`some Error Occured\n${error}`);
             console.log('Some Error Occured\n',error);

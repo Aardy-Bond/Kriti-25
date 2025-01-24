@@ -5,7 +5,6 @@ import { RegisterBusiness } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
 // import { Buffer } from 'buffer';
 
-
 const Register = ()=>{
 
     const [formData , setFormData] = useState({
@@ -19,19 +18,18 @@ const Register = ()=>{
         setFormData((prevFormData) => ({...prevFormData,[name]: value}));
     }
 
-     function handleHashing(){
-            // const cipher = crypto.createCipheriv("aes-256-ctr", key);
-            // const encrypted = Buffer.concat([cipher.update(JSON.stringify(formData)), cipher.final()]);
-            const encrypted = CryptoJS.AES.encrypt(JSON.stringify(formData),key).toString();
-            return encrypted;
+    const handleHashing=(formData)=>{
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(formData),key).toString();
+    return encrypted;
     }
+    
     async function handleSubmit() {
         try {
             if(!formData.country.trim() || !formData.businessName.trim() || !formData.user.trim() ||
             !formData.sector.trim() || !formData.yearOfEstablishment.trim() || !key.trim()) return;
-            const data = handleHashing()
+            const data = handleHashing(formData);
             console.log(data);
-            const res = await axios.post('http://localhost:3000/api/v1/company/register',data,{
+            const res = await axios.post('http://localhost:3000/api/v1/company/register',{data:data},{
                 headers: {
                     'Content-Type': 'application/json',
                 },

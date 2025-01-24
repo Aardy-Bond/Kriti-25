@@ -4,7 +4,7 @@ import {nftContractAddress , NFT_ABI} from '../configs/constants.js'
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
 
-export const GetListings = async({address})=>{ //will be replaced by GraohQL
+export const GetListings = async({address})=>{ //will be replaced by GraphQL
     try {
         const gasLimit = BigInt(await contract.methods.getListings().estimateGas({
             from: address
@@ -29,18 +29,19 @@ export const GetListings = async({address})=>{ //will be replaced by GraohQL
 
 export const SellCredits = async({data,address})=>{
     try {
-        const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).send({
+        const totalPrice = data.price*data.units
+        const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).estimateGas({
             from:address
         }))
         const bufferGasLimit = (gasLimit*13n)/10n;
-        let totalPrice = data.units * data.price;
+        console.log(bufferGasLimit)
         let receipt = await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address,
             gas:bufferGasLimit.toString()
         })
-        receipt = JSON.stringify(listings , (key,value)=>{
-            typeof value === 'bigint'?Number(value):value;
-        })
+        // receipt = JSON.stringify(receipt , (key,value)=>{
+        //     typeof value === 'bigint'?Number(value):value;
+        // })
         console.log(`Transaction Successful\n${receipt}`);
         return receipt;
     } catch (error) {
@@ -51,7 +52,7 @@ export const SellCredits = async({data,address})=>{
 
 export const BuyCredits = async ({listId,address,totalPrice}) =>{
     try {
-        const gasLimit = BigInt(await contract.methods.purchase(listId).send({
+        const gasLimit = BigInt(await contract.methods.purchase(listId).estimateGas({
             from:address,
             value:Web3.utils.toWei(totalPrice.toString(), "ether"),
         }))
@@ -61,9 +62,9 @@ export const BuyCredits = async ({listId,address,totalPrice}) =>{
             gas:bufferGasLimit.toString(),
             value:Web3.utils.toWei(totalPrice.toString(), "ether"),
         })
-        receipt = JSON.stringify(receipt,(key,value)=>{
-            typeof value === 'bigint'?Number(value):value
-        })
+        receipt = JSON.stringify(receipt, (key, value) =>
+            typeof value === "bigint" ? Number(value) : value,
+        );
         console.log(`Transaction Successful\n${receipt}`);
         return receipt;
     } catch (error) {

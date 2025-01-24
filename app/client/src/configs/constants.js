@@ -1,5 +1,10 @@
-export const nftContractAddress = "0x62A54EBb62263AE1eb01e5f22DdAe120807B2833";
+export const nftContractAddress = "0xab3db1f902fdbf2249b06e586797f13b65c8c4c4";
 export const NFT_ABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
 	{
 		"inputs": [],
 		"name": "AccessControlBadConfirmation",
@@ -154,44 +159,29 @@ export const NFT_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "listId",
 				"type": "uint256"
 			},
 			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "businessName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "sector",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "carbonCredits",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "country",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "yearOfEstablishment",
-						"type": "string"
-					}
-				],
 				"indexed": false,
-				"internalType": "struct UserBoundNFT.BusinessInfo",
-				"name": "newInfo",
-				"type": "tuple"
+				"internalType": "uint256",
+				"name": "units",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "totalPrice",
+				"type": "uint256"
 			}
 		],
-		"name": "MetadataUpdated",
+		"name": "ListedCredits",
 		"type": "event"
 	},
 	{
@@ -200,44 +190,11 @@ export const NFT_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "listId",
 				"type": "uint256"
-			},
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "businessName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "sector",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "carbonCredits",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "country",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "yearOfEstablishment",
-						"type": "string"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct UserBoundNFT.BusinessInfo",
-				"name": "info",
-				"type": "tuple"
 			}
 		],
-		"name": "RegisteredBusiness",
+		"name": "PurchasedCredits",
 		"type": "event"
 	},
 	{
@@ -409,6 +366,99 @@ export const NFT_ABI = [
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "accounts",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "ids",
+				"type": "uint256[]"
+			}
+		],
+		"name": "balanceOfBatch",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			}
+		],
+		"name": "getRoleAdmin",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -424,6 +474,90 @@ export const NFT_ABI = [
 		"name": "grantRole",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "hasRole",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_units",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_totalPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "list",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_listId",
+				"type": "uint256"
+			}
+		],
+		"name": "purchase",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -591,152 +725,6 @@ export const NFT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [],
-		"name": "ADMIN_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "accounts",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "ids",
-				"type": "uint256[]"
-			}
-		],
-		"name": "balanceOfBatch",
-		"outputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			}
-		],
-		"name": "getRoleAdmin",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "hasRole",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			}
-		],
-		"name": "isApprovedForAll",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "bytes4",
@@ -761,6 +749,24 @@ export const NFT_ABI = [
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "newUri",
+				"type": "string"
+			}
+		],
+		"name": "updateUri",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			}
 		],
 		"name": "uri",
@@ -776,11 +782,6 @@ export const NFT_ABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
 			{
 				"internalType": "uint256",
 				"name": "tokenId",
@@ -798,7 +799,47 @@ export const NFT_ABI = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
+]
+export const iotContractAddress = "0xe0b5709dd00984cb0438183c81ea612b948b6c62";
+export const IOT_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_identifier",
+				"type": "string"
+			}
+		],
+		"name": "getByIdentifier",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_credits",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_identifier",
+				"type": "string"
+			}
+		],
+		"name": "updateCredits",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
 export const zkSellContractAddress = "0x3605cEBaa49117423fd33923CB967B851970e1a2";
 export const ZK_SELL_ABI = [
 	{
@@ -847,5 +888,40 @@ export const ZK_SELL_ABI = [
 		"type": "function"
 	}
 ]
-export const zkBuyContractAddress ="";
-export const ZK_BUY_ABI =[]
+export const zkBuyContractAddress = "0x214fb5f32DBc79433e06897aa9F31F4C771150C9";
+export const ZK_BUY_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[2]",
+				"name": "_pA",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[2][2]",
+				"name": "_pB",
+				"type": "uint256[2][2]"
+			},
+			{
+				"internalType": "uint256[2]",
+				"name": "_pC",
+				"type": "uint256[2]"
+			},
+			{
+				"internalType": "uint256[1]",
+				"name": "_pubSignals",
+				"type": "uint256[1]"
+			}
+		],
+		"name": "verifyProof",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
