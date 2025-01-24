@@ -11,6 +11,7 @@ export const generateSellProof  = async({balance , units})=>{
         const {proof , publicSignals} = await snarkjs.groth16.fullProve(
             input, wasmfile , zkeyfile //get these files from ipfs instead
         );
+        if(publicSignals[0]=='0') throw new Error();
         const vKeyResponse = await fetch(jsonfile);
         if (!vKeyResponse.ok) throw new Error(`Failed to fetch verification key: ${vKeyResponse.statusText}`);
         const vKey = await vKeyResponse.json();
@@ -35,6 +36,7 @@ export const generateBuyProof = async({balance , units , limit})=>{
         const {proof , publicSignals } = await snarkjs.groth16.fullProve(
             input , wasmfile , zkeyfile
         )
+        if(publicSignals[0]=='0') throw new Error();
         const vKeyResponse = await fetch(jsonfile);
         if (!vKeyResponse.ok) throw new Error(`Failed to fetch verification key: ${vKeyResponse.statusText}`);
         const vKey = await vKeyResponse.json();

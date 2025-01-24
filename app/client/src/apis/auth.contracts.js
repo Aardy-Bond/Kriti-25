@@ -56,11 +56,12 @@ export const SignInBusiness = async({formData})=>{
 export const updateURI = async({data , address})=>{
     try {
         if(!data.tokenId || !data.newUri) return;
-        const gasLimit = BigInt(await contract.methods.updateUri(data.tokenId , data.newUri).send({
+        const gasLimit = BigInt(await contract.methods.updateUri(data.tokenId , data.newUri).estimateGas({
             from:address
-        }))
+        }));
+        const uri = `ipfs://${data.newUri}`;
         const bufferGasLimit = (gasLimit*13n)/10n;
-        let receipt = await contract.methods.updateUri(data.tokenId , data.newUri).send({
+        let receipt = await contract.methods.updateUri(data.tokenId , uri).send({
             from:address,
             gas:bufferGasLimit.toString()
         })

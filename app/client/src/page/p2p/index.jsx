@@ -5,6 +5,8 @@ import { BuyCredits, GetListings, SellCredits } from "../../apis/p2p.contracts";
 import { generateSellProof , generateBuyProof } from "../../configs/snark.js";
 import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from 'axios';
+import { updateURI } from "../../apis/auth.contracts.js";
+import CryptoJS from "crypto-js";
 
 const P2P = ()=>{
 
@@ -33,23 +35,38 @@ const P2P = ()=>{
         getListings();
     },[])
 
+    const handleHashing=(formData)=>{
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(formData),accData.key).toString();
+        return encrypted;
+    }
+
     async function handleIPFSUpdate() {
         //get the recent credits from the iot contract-d
         //update the accData in the client-d
         //proceed with the handleBuy()-d
-        //after the transaction's success, finally update the data on the IPFS and then update in the contract
-        const data = {
+        //after the transaction's success, update the data on the IPFS-d
+        //finally update in the contract
+        let data = {
             ...accData , carbonCredits:accData.carbonCredits - formData.units
         }
-        const response = await axios.post('http://localhost:3000/api/v1/register' , data , {
+        delete data.key;
+        const hashed = handleHashing(data);
+        const res = await axios.post('http://localhost:3000/api/v1/company/register' , {data:hashed} , {
             headers:{
                 'Content-Type': 'application/json',
             },
         });
+        console.log(res.data.data.cid);
+        const transaction = await updateURI({data:{
+            tokenId : accData.tokenId,
+            newUri : res.data.data.cid
+        },address:accData.user})
+        if(!transaction) return;
     }
 
     async function handleBuy(listId) {
         const carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
+        // const carbonCredits = 100;
         if(!carbonCredits) return;
         setAccData({...accData , carbonCredits:carbonCredits});
         res = await generateBuyProof({balance:accData.carbonCredits||100 , units:formData.units, limit:accData.creditsLimit||150}); 
@@ -68,11 +85,12 @@ const P2P = ()=>{
     }
 
     async function handleSell() {
-        const carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
+        // let carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
+        let carbonCredits = 100;
         if(!carbonCredits) return;
         setAccData({...accData , carbonCredits:carbonCredits});
         formData.totalPrice = formData.price * formData.units;
-        res = await generateSellProof({balance:accData.carbonCredits||100 , units:formData.units});
+        let res = await generateSellProof({balance:accData.carbonCredits||100 , units:formData.units});
         if(!res) return;
         const proof = {
             ...res.proof ,
@@ -82,22 +100,10 @@ const P2P = ()=>{
         }
         // res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],action:'sell'});
         // if(!res) return;    
+        console.log(accData);
         res = await SellCredits({data:formData,address:accData.user});
         if(!res) return;
         await handleIPFSUpdate();
-    }
-
-    const submitProof =async({proof , publicInputs , action}) =>{
-        try {
-            let transaction ;
-            if(action == 'sell') transaction = await SubmitSellProof({proof,publicInputs});
-            else transaction = await SubmitBuyProof({proof , publicInputs});
-            if(!transaction) throw new Error('Some Error occured');
-            return true;
-       } catch (error) {
-            console.log(`submit-proof failed\n${error}`);
-            return false;
-       }
     }
 
     const handleChange = async(e)=>{

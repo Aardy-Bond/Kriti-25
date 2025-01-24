@@ -30,17 +30,18 @@ export const GetListings = async({address})=>{ //will be replaced by GraphQL
 export const SellCredits = async({data,address})=>{
     try {
         const totalPrice = data.price*data.units
-        const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).send({
+        const gasLimit = BigInt(await contract.methods.list(data.price , data.units , totalPrice).estimateGas({
             from:address
         }))
         const bufferGasLimit = (gasLimit*13n)/10n;
+        console.log(bufferGasLimit)
         let receipt = await contract.methods.list(data.price , data.units , totalPrice).send({
             from:address,
             gas:bufferGasLimit.toString()
         })
-        receipt = JSON.stringify(receipt , (key,value)=>{
-            typeof value === 'bigint'?Number(value):value;
-        })
+        // receipt = JSON.stringify(receipt , (key,value)=>{
+        //     typeof value === 'bigint'?Number(value):value;
+        // })
         console.log(`Transaction Successful\n${receipt}`);
         return receipt;
     } catch (error) {
@@ -51,7 +52,7 @@ export const SellCredits = async({data,address})=>{
 
 export const BuyCredits = async ({listId,address,totalPrice}) =>{
     try {
-        const gasLimit = BigInt(await contract.methods.purchase(listId).send({
+        const gasLimit = BigInt(await contract.methods.purchase(listId).estimateGas({
             from:address,
             value:Web3.utils.toWei(totalPrice.toString(), "ether"),
         }))
@@ -61,9 +62,9 @@ export const BuyCredits = async ({listId,address,totalPrice}) =>{
             gas:bufferGasLimit.toString(),
             value:Web3.utils.toWei(totalPrice.toString(), "ether"),
         })
-        receipt = JSON.stringify(receipt,(key,value)=>{
-            typeof value === 'bigint'?Number(value):value
-        })
+        receipt = JSON.stringify(receipt, (key, value) =>
+            typeof value === "bigint" ? Number(value) : value,
+        );
         console.log(`Transaction Successful\n${receipt}`);
         return receipt;
     } catch (error) {
