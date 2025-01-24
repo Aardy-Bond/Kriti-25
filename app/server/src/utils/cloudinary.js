@@ -13,7 +13,8 @@ export const uploadToCloudinary = async (filePath, folder) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder,
-      resource_type: "auto", // Automatically detect the file type
+      resource_type: "raw",
+      folder: "pdfs",
     });
     return result;
   } catch (error) {

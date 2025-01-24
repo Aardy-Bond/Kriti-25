@@ -1,12 +1,29 @@
-import React, { useState } from "react";
-import data from "./Data.json";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 function App() {
+  const [companies, setCompanies] = useState([]);
   const [selectedPDF, setSelectedPDF] = useState(null);
-  const pdfFiles = {
-    doc1: "/docs/doc1.pdf",
-    doc2: "/docs/doc2.pdf",
-  };
+  // Fetch company data from backend when the component mounts
+  useEffect(() => {
+    const fetchCompanyData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/dashboard/getCompanyData"
+        );
+        console.log("Fetched data:", response.data); // Debugging log
+
+        if (response.data.success) {
+          setCompanies(response.data.data);
+        } else {
+          console.error("Failed to fetch company data");
+        }
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      }
+    };
+
+    fetchCompanyData();
+  }, []);
 
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-[#1a1a1a]">
@@ -18,7 +35,7 @@ function App() {
             </h1>
             <div className="overflow-y-auto h-full p-4">
               <div className="pb-20">
-                {data.map((company, index) => (
+                {companies.map((company, index) => (
                   <div
                     key={index}
                     className="bg-gray-800 text-white rounded-lg p-4 mb-4 shadow-lg"
@@ -27,18 +44,23 @@ function App() {
                     <p>Sector: {company.sector}</p>
                     <p>Country: {company.country}</p>
                     <div className="flex justify-end gap-2 mt-4">
-                      <button
-                        className="bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600"
-                        onClick={() => setSelectedPDF(pdfFiles.doc1)}
-                      >
-                        Doc1
-                      </button>
-                      <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        onClick={() => setSelectedPDF(pdfFiles.doc2)}
-                      >
-                        Doc2
-                      </button>
+                      {company.pdf1Url && (
+                        <button
+                          className="bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600"
+                          onClick={() => setSelectedPDF(company.pdf1Url)}
+                        >
+                          Doc1
+                        </button>
+                      )}
+
+                      {company.pdf2Url && (
+                        <button
+                          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                          onClick={() => setSelectedPDF(company.pdf2Url)}
+                        >
+                          Doc2
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -57,6 +79,7 @@ function App() {
             >
               Close
             </button>
+            {console.log("Selected PDF URL:", selectedPDF)}
             <iframe
               src={selectedPDF}
               className="w-full h-full border-none"
