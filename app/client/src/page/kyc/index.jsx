@@ -26,14 +26,15 @@ const Register = () => {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleHashing = (formData) => {
+  function handleHashing() {
+    // const cipher = crypto.createCipheriv("aes-256-ctr", key);
+    // const encrypted = Buffer.concat([cipher.update(JSON.stringify(formData)), cipher.final()]);
     const encrypted = CryptoJS.AES.encrypt(
       JSON.stringify(formData),
       key
     ).toString();
     return encrypted;
-  };
-
+  }
   async function handleSubmit() {
     try {
       if (
@@ -45,11 +46,11 @@ const Register = () => {
         !key.trim()
       )
         return;
-      const data = handleHashing(formData);
+      const data = handleHashing();
       console.log(data);
       const res = await axios.post(
         "http://localhost:3000/api/v1/company/register",
-        { data: data },
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -104,20 +105,13 @@ const Register = () => {
               required
             />
 
-            <label>Enter your Metamask Wallet Address</label>
-            <input type="text" name="user" onChange={handleChange} required />
+            <label>Upload Document 1</label>
+            <input type="file" name="doc1" onChange={handleChange} required />
 
-            <label>Enter a private key</label>
-            <input
-              type="password"
-              name="private_key"
-              onChange={(e) => {
-                setKey(e.target.value);
-              }}
-              required
-            />
+            <label>Upload Document 2</label>
+            <input type="file" name="doc2" onChange={handleChange} required />
 
-            <button className="submit">Proceed</button>
+            <button className="submit">Submit</button>
           </form>
           <p className="register">
             Already Registered?{" "}
