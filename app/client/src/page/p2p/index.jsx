@@ -7,6 +7,7 @@ import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from 'axios';
 import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
+import jsPDF from "jspdf";
 
 const P2P = ()=>{
 
@@ -64,6 +65,18 @@ const P2P = ()=>{
         if(!transaction) return;
     }
 
+    function generateReceipt(res) {
+        res = {...res , units:formData.units , date:Date.now() , 
+            price_per_credit:formData.price , totalPrice:formData.totalPrice};
+        const doc = new jsPDF();
+        const formattedData = JSON.stringify(res, null, 2);
+        doc.setFont("Courier", "normal");
+        doc.text("Receipt Data:", 10, 10);
+        doc.text(formattedData, 10, 20);
+      
+        doc.save(`receipt-${Date.now()}.pdf`);
+    }
+
     async function handleBuy(listId) {
         const carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
         // const carbonCredits = 100;
@@ -82,6 +95,7 @@ const P2P = ()=>{
         res = await BuyCredits({listId,address:accData.user});
         if(!res) return;
         await handleIPFSUpdate();
+        generateReceipt(res)
     }
 
     async function handleSell() {

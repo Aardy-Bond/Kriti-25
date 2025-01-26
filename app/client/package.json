@@ -17,6 +17,7 @@
     "crypto-browserify": "^3.12.1",
     "crypto-js": "^4.2.0",
     "express": "^4.21.2",
+    "jspdf": "^2.5.2",
     "pinata": "^1.10.1",
     "pinata-web3": "^0.5.4",
     "react": "^18.3.1",
