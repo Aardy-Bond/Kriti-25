@@ -78,7 +78,10 @@ const Register = () => {
         <div className="col2">
           <h1>Register your company</h1>
 
-          <form className="create">
+          <form className="create" onSubmit={(e)=>{
+            e.preventDefault();
+            handleSubmit();
+          }}>
             <label>Enter your Company Name</label>
             <input
               type="text"
@@ -114,7 +117,7 @@ const Register = () => {
               required
             />
 
-            <button className="submit" onClick={handleSubmit}>Proceed</button>
+            <button className="submit" type="submit" >Proceed</button>
           </form>
           <p className="register">
             Already Registered?{" "}

@@ -4,7 +4,6 @@ import http from "http";
 import { Server as SocketIo } from "socket.io";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
-import iotRoutes from "./routes/iot.routes.js";
 import companyRoutes from "./routes/company.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 
@@ -32,7 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/v1/iot", iotRoutes);
 app.use("/api/v1/companies", companyRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
