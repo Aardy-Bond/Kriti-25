@@ -8,7 +8,7 @@ function App() {
     const fetchCompanyData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/dashboard/getCompanyData"
+          "http://localhost:3000/api/v1/dashboard/getCompanyData"
         );
         console.log("Fetched data:", response.data); // Debugging log
 

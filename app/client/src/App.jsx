@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./page/register/index.jsx";
@@ -10,25 +10,7 @@ import P2P from "./page/p2p/index.jsx";
 import KYC from "./page/kyc/index.jsx";
 import styles from "./styles/Home.module.css";
 
-import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
-
-import { WagmiConfig } from "wagmi";
-import { arbitrum, mainnet } from "viem/chains";
-
-// 1. Get projectId
-const projectId = "556f704d7102922b2bfd2c6b88c70969";
-
-// 2. Create wagmiConfig
-const metadata = {
-  name: "web3-modal-setup",
-  description: "Web3 Modal Example",
-};
-
-const chains = [mainnet, arbitrum];
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
-
-// 3. Create modal
-createWeb3Modal({ wagmiConfig, projectId, chains });
+import { useAccount} from "wagmi";
 
 function App() {
   const [isNetworkSwitchHighlighted, setIsNetworkSwitchHighlighted] =
@@ -41,24 +23,20 @@ function App() {
   };
 
   const context = useContext(Context);
-  const { setAccData, isConnected, setIsConnected } = context;
+  const { address, isConnected } = useAccount();
 
-  const [formData, setFormData] = useState({
-    tokenId: 0,
-    user: "",
-  });
+  useEffect(() => {
+    if (isConnected && address) {
+      setAccData({address:address});
+      setIsConnected(isConnected);
+    }
+  }, [isConnected, address]);
 
-  const [key, setKey] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
+  const { setAccData, setIsConnected } = context;
 
   return (
     <>
       <div className="wallets">
-        <WagmiConfig config={wagmiConfig}>
           <header>
             <div
               className={styles.backdrop}
@@ -88,7 +66,6 @@ function App() {
               </div>
             </div>
           </header>
-        </WagmiConfig>
       </div>
       <BrowserRouter>
         <Routes>

@@ -4,10 +4,32 @@ import './index.css'
 import { ContextProvider } from './context/context.jsx'
 import App from './App.jsx'
 
+import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
+
+import { WagmiConfig} from "wagmi";
+import { arbitrum, mainnet } from "viem/chains";
+
+// 1. Get projectId
+export const projectId = "556f704d7102922b2bfd2c6b88c70969";
+
+// 2. Create wagmiConfig
+export const metadata = {
+  name: "web3-modal-setup",
+  description: "Web3 Modal Example",
+};
+
+export const chains = [mainnet, arbitrum];
+export const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+
+// 3. Create modal
+createWeb3Modal({ wagmiConfig, projectId, chains });
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <WagmiConfig config={wagmiConfig}>
     <ContextProvider>
       <App />
     </ContextProvider>
+    </WagmiConfig>
   </StrictMode>,
 )
