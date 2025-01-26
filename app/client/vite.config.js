@@ -8,7 +8,7 @@ export default defineConfig({
       external: ['@web3modal/wagmi/react'], // Add the module here
     },
   },
-  plugins: [nodePolyfills() , react()],
+  plugins: [nodePolyfills({protocolImports: true}) , react()],
   resolve: {
     alias: {
       stream: 'stream-browserify',
