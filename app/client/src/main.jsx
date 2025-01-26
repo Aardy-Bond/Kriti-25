@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { ContextProvider } from './context/context.jsx'
 import App from './App.jsx'
+import { ApolloProvider } from '@apollo/client';
+import client from "./configs/apollo.js";
 
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 
@@ -26,10 +28,12 @@ createWeb3Modal({ wagmiConfig, projectId, chains });
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+      <ApolloProvider client={client}>
     <WagmiConfig config={wagmiConfig}>
     <ContextProvider>
       <App />
     </ContextProvider>
     </WagmiConfig>
+      </ApolloProvider>
   </StrictMode>,
 )

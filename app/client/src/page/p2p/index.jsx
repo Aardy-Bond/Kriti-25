@@ -7,33 +7,57 @@ import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from 'axios';
 import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
+import { useQuery } from '@apollo/client';
+import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
 
 const P2P = ()=>{
 
     const [listings , setListings] = useState([]);
-    const [loading , setLoading] = useState(true);
-    const [error , setError] = useState("");
+    const [isloading , setLoading] = useState(true);
+    const [iserror , setError] = useState(false);
     const [formData , setFormData] = useState({
         price:10 , units:0 , totalPrice:0
     })
     const context = useContext(Context);
     const {accData ,  setAccData} = context;
 
-    async function getListings() { //use graphQL for this instead
-        try {
-            const res = await GetListings();
-            if(!res) throw new Error('Some Error Occured');
-            setListings(res);
-            setLoading(false);
-        } catch (error) {
-            console.log('Some Error Occured')
-            setLoading(false)
-            setError('Could not Fetch the Market')
-        }
-    }
+    const { loading:loadingList, error:errorList, data:dataList , refetch:refetchList } = useQuery(GET_LIST, {
+        variables: { first: 0,skip:0 },
+    });
+    const { loading:loadingPurchase, error:errorPurchase, data:dataPurchase , refetch:refetchPurchase } = useQuery(GET_PURCHASE, {
+        variables: { first: 0,skip:0 },
+    });
+
+    //useEffect(() => {
+      //  refetch({ first: 0, skip: 0 });
+    //}, [refetch]);
+
     useEffect(()=>{
-        getListings();
-    },[])
+        if(loadingList || loadingPurchase) setLoading(true);
+        else setLoading('');
+    },[loadingList,loadingPurchase]);
+
+    useEffect(()=>{
+        console.log(errorList)
+        if(errorList || errorPurchase) setError(true);
+        else setError(false);
+    },[errorPurchase,errorList]);
+
+
+    useEffect(()=>{
+        if(dataList && dataPurchase) {
+            const purchaseIds = dataPurchase.map((item) => item.listId);
+
+            // Filter objects in dataList that are not in dataPurchase
+            const uniqueList = dataList.filter(
+                (item) => !purchaseIds.includes(item.listId)
+            );
+
+            setListings(uniqueList);
+        }
+    },[dataList , dataPurchase])
+
+
 
     const handleHashing=(formData)=>{
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(formData),accData.key).toString();
@@ -127,11 +151,11 @@ const P2P = ()=>{
         </div>
    
         <div style={{color:'red'}}>
-            {error}
+            {iserror && "Some Error Occured"}
         </div>
 
         {
-            loading? 
+            isloading?
             (
                 <>
                 Loading the Market...

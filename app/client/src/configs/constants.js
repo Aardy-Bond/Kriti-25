@@ -925,3 +925,4 @@ export const ZK_BUY_ABI = [
 		"type": "function"
 	}
 ]
+export const subgraphUrl= "https://api.studio.thegraph.com/query/102266/listing/v0.1"
