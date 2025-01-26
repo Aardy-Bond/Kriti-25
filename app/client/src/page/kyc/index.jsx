@@ -1,11 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { RegisterBusiness } from "../../apis/auth.contracts.js";
 import { useNavigate } from "react-router-dom";
 
-// import crypto from 'crypto-browserify';
-import CryptoJS from "crypto-js";
-// import { Buffer } from 'buffer';
 import logo from "../../assets/logo.png";
 
 const Register = () => {
@@ -15,41 +11,25 @@ const Register = () => {
     businessName: "",
     country: "",
     sector: "",
-    yearOfEstablishment: "",
-    user: "",
+    yearOfEstablishment: ""
   });
-
-  const [key, setKey] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
-
-  function handleHashing() {
-    // const cipher = crypto.createCipheriv("aes-256-ctr", key);
-    // const encrypted = Buffer.concat([cipher.update(JSON.stringify(formData)), cipher.final()]);
-    const encrypted = CryptoJS.AES.encrypt(
-      JSON.stringify(formData),
-      key
-    ).toString();
-    return encrypted;
-  }
   async function handleSubmit() {
     try {
       if (
         !formData.country.trim() ||
         !formData.businessName.trim() ||
-        !formData.user.trim() ||
+        !formData.trim() ||
         !formData.sector.trim() ||
-        !formData.yearOfEstablishment.trim() ||
-        !key.trim()
+        !formData.yearOfEstablishment.trim()
       )
         return;
-      const data = handleHashing();
-      console.log(data);
       const res = await axios.post(
-        "http://localhost:3000/api/v1/company/register",
+        "http://localhost:3000/api/v1/dashboard/uploads",
         data,
         {
           headers: {
@@ -57,16 +37,8 @@ const Register = () => {
           },
         }
       );
-      if (res.status === 500) throw new Error("Not Uploaded to IPFS");
-      // send the data to the admin side for verification(to be done afterwards)
-      const transaction = await RegisterBusiness({
-        data: res.data.data,
-        formData: formData,
-      });
-      if (!transaction) {
-        alert("Not Registered");
-        return;
-      }
+      if (res.status === 500) throw new Error("Documents not Submitted");
+      console.log('Documents Submitted')
     } catch (error) {
       console.log(`Some Error occured\n${error.message}`);
     }
@@ -113,7 +85,7 @@ const Register = () => {
 
             <button className="submit">Submit</button>
           </form>
-          <p className="register">
+          <p className="register" onClick={handleSubmit}>
             Already Registered?{" "}
             <a
               onClick={() => {

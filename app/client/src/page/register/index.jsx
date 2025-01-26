@@ -2,10 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { RegisterBusiness } from "../../apis/auth.contracts.js";
 import { useNavigate } from "react-router-dom";
-
-// import crypto from 'crypto-browserify';
 import CryptoJS from "crypto-js";
-// import { Buffer } from 'buffer';
 import logo from "../../assets/logo.png";
 
 const Register = () => {
@@ -117,7 +114,7 @@ const Register = () => {
               required
             />
 
-            <button className="submit">Proceed</button>
+            <button className="submit" onClick={handleSubmit}>Proceed</button>
           </form>
           <p className="register">
             Already Registered?{" "}

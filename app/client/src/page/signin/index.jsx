@@ -93,7 +93,7 @@ const SignIn = () => {
 
             <button className="submit">Proceed</button>
           </form>
-          <p className="register">
+          <p className="register" onClick={handleSubmit}>
             Not A User?{" "}
             <a
               onClick={() => {

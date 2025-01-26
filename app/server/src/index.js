@@ -32,9 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/iot", iotRoutes);
-app.use("/api/companies", companyRoutes);
-app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/v1/iot", iotRoutes);
+app.use("/api/v1/companies", companyRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Ping endpoint
 app.get("/ping", (req, res) => {
