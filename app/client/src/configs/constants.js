@@ -1,4 +1,4 @@
-export const nftContractAddress = "0xab3db1f902fdbf2249b06e586797f13b65c8c4c4";
+export const nftContractAddress = "0x651609808c67be98F0712eFf7698fCc9340ba887"; // to be changed
 export const NFT_ABI = [
 	{
 		"inputs": [],
@@ -157,19 +157,19 @@ export const NFT_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "uint256",
 				"name": "listId",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "uint256",
 				"name": "units",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "uint256",
 				"name": "price",
 				"type": "uint256"
@@ -188,7 +188,7 @@ export const NFT_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "uint256",
 				"name": "listId",
 				"type": "uint256"
@@ -837,91 +837,6 @@ export const IOT_ABI = [
 		"name": "updateCredits",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-]
-export const zkSellContractAddress = "0x3605cEBaa49117423fd33923CB967B851970e1a2";
-export const ZK_SELL_ABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_verifierAddress",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256[2]",
-				"name": "proofA",
-				"type": "uint256[2]"
-			},
-			{
-				"internalType": "uint256[2][2]",
-				"name": "proofB",
-				"type": "uint256[2][2]"
-			},
-			{
-				"internalType": "uint256[2]",
-				"name": "proofC",
-				"type": "uint256[2]"
-			},
-			{
-				"internalType": "uint256[1]",
-				"name": "publicInputs",
-				"type": "uint256[1]"
-			}
-		],
-		"name": "validateUser",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-]
-export const zkBuyContractAddress = "0x214fb5f32DBc79433e06897aa9F31F4C771150C9";
-export const ZK_BUY_ABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256[2]",
-				"name": "_pA",
-				"type": "uint256[2]"
-			},
-			{
-				"internalType": "uint256[2][2]",
-				"name": "_pB",
-				"type": "uint256[2][2]"
-			},
-			{
-				"internalType": "uint256[2]",
-				"name": "_pC",
-				"type": "uint256[2]"
-			},
-			{
-				"internalType": "uint256[1]",
-				"name": "_pubSignals",
-				"type": "uint256[1]"
-			}
-		],
-		"name": "verifyProof",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	}
 ]
