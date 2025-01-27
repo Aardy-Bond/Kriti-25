@@ -68,7 +68,7 @@ const SignIn = () => {
         </div>
 
         <div className="col2">
-          <h1 className="login">Login to your Account</h1>
+          <h1 style={{fontSize:'2rem',margin:'20px 0px'}} className="login">Login to your Account</h1>
 
           <form className="create" onSubmit={(e)=>{
             e.preventDefault();

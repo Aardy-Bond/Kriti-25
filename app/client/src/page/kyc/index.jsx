@@ -69,7 +69,7 @@ const KYC = () => {
         </div>
 
         <div className="col2">
-          <h1>Register your company</h1>
+          <div style={{fontSize:'2rem',margin:'20px 0px'}}>Register your company</div>
 
           <form className="create" onSubmit={(e)=>{
             e.preventDefault();
