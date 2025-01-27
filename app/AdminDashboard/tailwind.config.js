@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // Include all your JSX/TSX files
+  ],
   theme: {
-    extend: {
-      colors: {
-        'off-grey': '#F7F8FA',
-      },
+    extend: {},
   },
   plugins: [],
-}}
+};
