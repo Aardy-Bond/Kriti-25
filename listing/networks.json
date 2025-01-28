@@ -1,8 +1,8 @@
 {
   "sepolia": {
-    "main.sol": {
-      "address": "0xab3db1f902fdbf2249b06e586797f13b65c8c4c4",
-      "startBlock": 7553763
+    "NFT.sol": {
+      "address": "0x651609808c67be98F0712eFf7698fCc9340ba887",
+      "startBlock": 7583494
     }
   }
 }

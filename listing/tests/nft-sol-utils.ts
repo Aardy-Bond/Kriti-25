@@ -10,7 +10,7 @@ import {
   TransferBatch,
   TransferSingle,
   URI
-} from "../generated/main.sol/main.sol"
+} from "../generated/NFT.sol/NFT.sol"
 
 export function createApprovalForAllEvent(
   account: Address,

@@ -8,7 +8,7 @@ import {
   TransferBatch as TransferBatchEvent,
   TransferSingle as TransferSingleEvent,
   URI as URIEvent
-} from "../generated/main.sol/main.sol"
+} from "../generated/NFT.sol/NFT.sol"
 import {
   ApprovalForAll,
   ListedCredits,
