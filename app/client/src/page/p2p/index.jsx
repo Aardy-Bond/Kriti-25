@@ -1,40 +1,66 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context.jsx";
-import { BuyCredits, GetListings, SellCredits } from "../../apis/p2p.contracts";
+import { BuyCredits, SellCredits } from "../../apis/p2p.contracts";
 // import { SubmitSellProof , SubmitBuyProof } from "../../apis/verifierZK.js";
 import { generateSellProof , generateBuyProof } from "../../configs/snark.js";
 import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from 'axios';
 import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
+import { useQuery } from '@apollo/client';
+import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
 import jsPDF from "jspdf";
 
 const P2P = ()=>{
 
     const [listings , setListings] = useState([]);
-    const [loading , setLoading] = useState(true);
-    const [error , setError] = useState("");
+    const [isloading , setLoading] = useState(true);
+    const [iserror , setError] = useState(false);
     const [formData , setFormData] = useState({
         price:10 , units:0 , totalPrice:0
     })
     const context = useContext(Context);
     const {accData ,  setAccData} = context;
 
-    async function getListings() { //use graphQL for this instead
-        try {
-            const res = await GetListings();
-            if(!res) throw new Error('Some Error Occured');
-            setListings(res);
-            setLoading(false);
-        } catch (error) {
-            console.log('Some Error Occured')
-            setLoading(false)
-            setError('Could not Fetch the Market')
-        }
-    }
+    const { loading:loadingList, error:errorList, data:dataList , refetch:refetchList } = useQuery(GET_LIST, {
+        variables: { first: 1,skip:0 },
+    });
+    const { loading:loadingPurchase, error:errorPurchase, data:dataPurchase , refetch:refetchPurchase } = useQuery(GET_PURCHASE, {
+        variables: { first: 1,skip:0 },
+    });
+
+    //useEffect(() => {
+      //  refetch({ first: 0, skip: 0 });
+    //}, [refetch]);
+
     useEffect(()=>{
-        getListings();
-    },[])
+        if(loadingList || loadingPurchase) setLoading(true);
+        else setLoading('');
+    },[loadingList,loadingPurchase]);
+
+    useEffect(()=>{
+        console.log(errorList)
+        if(errorList || errorPurchase) setError(true);
+        else setError(false);
+    },[errorPurchase,errorList]);
+
+
+    useEffect(()=>{
+        console.log(dataPurchase)
+        console.log(dataList)
+        if(dataList?.listeds && dataPurchase?.purchaseds) {
+            const purchaseIds = dataPurchase?.purchaseds.map((item) => item.listId);
+
+            // Filter objects in dataList that are not in dataPurchase
+            const uniqueList = dataList?.listeds.filter(
+                (item) => !purchaseIds.includes(item.listId)
+            );
+
+            setListings(uniqueList);
+        }
+    },[dataList , dataPurchase])
+
+
 
     const handleHashing=(formData)=>{
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(formData),accData.key).toString();
@@ -82,7 +108,7 @@ const P2P = ()=>{
         // const carbonCredits = 100;
         if(!carbonCredits) return;
         setAccData({...accData , carbonCredits:carbonCredits});
-        res = await generateBuyProof({balance:accData.carbonCredits||100 , units:formData.units, limit:accData.creditsLimit||150}); 
+        const res = await generateBuyProof({balance:accData.carbonCredits||100 , units:formData.units, limit:accData.creditsLimit||150}); 
         if(!res) return;
         const proof = {
             ...res.proof ,
@@ -90,10 +116,11 @@ const P2P = ()=>{
             pi_b:[res.proof.pi_b[0],res.proof.pi_b[1]],
             pi_c:[res.proof.pi_c[0],res.proof.pi_c[1]],
         }
+        console.log(proof);
         // res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],action:'buy'});
         // if(!res) return;
-        res = await BuyCredits({listId,address:accData.user});
-        if(!res) return;
+        const res1 = await BuyCredits({listId,address:accData.user});
+        if(!res1) return;
         await handleIPFSUpdate();
         generateReceipt(res)
     }
@@ -141,11 +168,11 @@ const P2P = ()=>{
         </div>
    
         <div style={{color:'red'}}>
-            {error}
+            {iserror && "Some Error Occured"}
         </div>
 
         {
-            loading? 
+            isloading?
             (
                 <>
                 Loading the Market...
