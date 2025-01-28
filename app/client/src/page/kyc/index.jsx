@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
 
-const Register = () => {
+const KYC = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -13,6 +13,15 @@ const Register = () => {
     sector: "",
     yearOfEstablishment: ""
   });
+
+  const [pdf1 , setpdf1] = useState(null);
+  const [pdf2 , setpdf2] = useState(null);
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === "pdf1") setpdf1(files[0]);
+    else if (name === "pdf2") setpdf2(files[0]);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,20 +32,28 @@ const Register = () => {
       if (
         !formData.country.trim() ||
         !formData.businessName.trim() ||
-        !formData.trim() ||
         !formData.sector.trim() ||
         !formData.yearOfEstablishment.trim()
-      )
+      ) return;
+      if (!pdf1 || !pdf2) {
+        setMessage("Both files are required.");
         return;
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/dashboard/uploads",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      }
+
+      const data = new FormData();
+      data.append("name", formData.businessName);
+      data.append("sector", formData.sector);
+      data.append("country", formData.country);
+      data.append("country", formData.country);
+      data.append("yearOfEstablishment", formData.yearOfEstablishment);
+      data.append("pdf1", pdf1);
+      data.append("pdf2", pdf2);
+    
+      const res = await axios.post("/api/v1/dashboard/upload", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (res.status === 500) throw new Error("Documents not Submitted");
       console.log('Documents Submitted')
     } catch (error) {
@@ -52,9 +69,12 @@ const Register = () => {
         </div>
 
         <div className="col2">
-          <h1>Register your company</h1>
+          <div style={{fontSize:'2rem',margin:'20px 0px'}}>Register your company</div>
 
-          <form className="create">
+          <form className="create" onSubmit={(e)=>{
+            e.preventDefault();
+            handleSubmit();
+          }}>
             <label>Enter your Company Name</label>
             <input
               type="text"
@@ -78,14 +98,14 @@ const Register = () => {
             />
 
             <label>Upload Document 1</label>
-            <input type="file" name="doc1" onChange={handleChange} required />
+            <input type="file" name="pdf1" onChange={handleFileChange} required />
 
             <label>Upload Document 2</label>
-            <input type="file" name="doc2" onChange={handleChange} required />
+            <input type="file" name="pdf2" onChange={handleFileChange} required />
 
-            <button className="submit">Submit</button>
+            <button className="submit" type="submit">Submit</button>
           </form>
-          <p className="register" onClick={handleSubmit}>
+          <p className="register">
             Already Registered?{" "}
             <a
               onClick={() => {
@@ -101,4 +121,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default KYC;

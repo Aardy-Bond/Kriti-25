@@ -9,6 +9,7 @@ import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
 import { useQuery } from '@apollo/client';
 import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
+import jsPDF from "jspdf";
 
 const P2P = ()=>{
 
@@ -90,6 +91,18 @@ const P2P = ()=>{
         if(!transaction) return;
     }
 
+    function generateReceipt(res) {
+        res = {...res , units:formData.units , date:Date.now() , 
+            price_per_credit:formData.price , totalPrice:formData.totalPrice};
+        const doc = new jsPDF();
+        const formattedData = JSON.stringify(res, null, 2);
+        doc.setFont("Courier", "normal");
+        doc.text("Receipt Data:", 10, 10);
+        doc.text(formattedData, 10, 20);
+      
+        doc.save(`receipt-${Date.now()}.pdf`);
+    }
+
     async function handleBuy(listId) {
         const carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
         // const carbonCredits = 100;
@@ -109,6 +122,7 @@ const P2P = ()=>{
         const res1 = await BuyCredits({listId,address:accData.user});
         if(!res1) return;
         await handleIPFSUpdate();
+        generateReceipt(res)
     }
 
     async function handleSell() {
