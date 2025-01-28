@@ -39,15 +39,12 @@ const P2P = ()=>{
     },[loadingList,loadingPurchase]);
 
     useEffect(()=>{
-        console.log(errorList)
         if(errorList || errorPurchase) setError(true);
         else setError(false);
     },[errorPurchase,errorList]);
 
 
     useEffect(()=>{
-        console.log(dataPurchase)
-        console.log(dataList)
         if(dataList?.listeds && dataPurchase?.purchaseds) {
             const purchaseIds = dataPurchase?.purchaseds.map((item) => item.listId);
 
@@ -179,13 +176,13 @@ const P2P = ()=>{
                 </>
             ):(
                 <div style={{display:'flex',flexDirection:'column'}}>
-                {listings.length<=0? (
+                {listings.length>0? (
                     listings.map((list,index)=>{
                         return(
-                            <div key={index}>
+                            <div className="" key={index}>
                                 <p>{list.units}</p>
-                                <p>{list.price}</p>
-                                <p>{list.total}</p>
+                                <p>{list.price}eth</p>
+                                <p>{list.totalPrice}eth</p>
                                 <button onClick={()=>handleBuy(list.id)}>Buy</button>
                             </div>
                         )

@@ -83,15 +83,10 @@ const Register = () => {
             handleSubmit();
           }}>
             <label>Enter your Company Name</label>
-            <input
-              type="text"
-              name="country"
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="businessName" onChange={handleChange} required/>
             <label>Enter your Country</label>
 
-            <input type="text" name="user" onChange={handleChange} required />
+            <input type="text" name="country" onChange={handleChange} required />
 
             <label>Enter your Sector</label>
             <input type="text" name="sector" onChange={handleChange} required />
