@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context.jsx";
-import { BuyCredits, GetListings, SellCredits } from "../../apis/p2p.contracts";
+import { BuyCredits, SellCredits } from "../../apis/p2p.contracts";
 // import { SubmitSellProof , SubmitBuyProof } from "../../apis/verifierZK.js";
 import { generateSellProof , generateBuyProof } from "../../configs/snark.js";
 import { GetCredits } from "../../apis/iot.contracts.js";
@@ -93,7 +93,7 @@ const P2P = ()=>{
         // const carbonCredits = 100;
         if(!carbonCredits) return;
         setAccData({...accData , carbonCredits:carbonCredits});
-        res = await generateBuyProof({balance:accData.carbonCredits||100 , units:formData.units, limit:accData.creditsLimit||150}); 
+        const res = await generateBuyProof({balance:accData.carbonCredits||100 , units:formData.units, limit:accData.creditsLimit||150}); 
         if(!res) return;
         const proof = {
             ...res.proof ,
@@ -101,10 +101,11 @@ const P2P = ()=>{
             pi_b:[res.proof.pi_b[0],res.proof.pi_b[1]],
             pi_c:[res.proof.pi_c[0],res.proof.pi_c[1]],
         }
+        console.log(proof);
         // res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],action:'buy'});
         // if(!res) return;
-        res = await BuyCredits({listId,address:accData.user});
-        if(!res) return;
+        const res1 = await BuyCredits({listId,address:accData.user});
+        if(!res1) return;
         await handleIPFSUpdate();
     }
 

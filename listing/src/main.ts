@@ -1,18 +1,18 @@
 import {
   ApprovalForAll as ApprovalForAllEvent,
-  ListedCredits as ListedCreditsEvent,
-  PurchasedCredits as PurchasedCreditsEvent,
+  Listed as ListedEvent,
+  Purchased as PurchasedEvent,
   RoleAdminChanged as RoleAdminChangedEvent,
   RoleGranted as RoleGrantedEvent,
   RoleRevoked as RoleRevokedEvent,
   TransferBatch as TransferBatchEvent,
   TransferSingle as TransferSingleEvent,
   URI as URIEvent
-} from "../generated/NFT.sol/NFT.sol"
+} from "../generated/main/main"
 import {
   ApprovalForAll,
-  ListedCredits,
-  PurchasedCredits,
+  Listed,
+  Purchased,
   RoleAdminChanged,
   RoleGranted,
   RoleRevoked,
@@ -36,8 +36,8 @@ export function handleApprovalForAll(event: ApprovalForAllEvent): void {
   entity.save()
 }
 
-export function handleListedCredits(event: ListedCreditsEvent): void {
-  let entity = new ListedCredits(
+export function handleListed(event: ListedEvent): void {
+  let entity = new Listed(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.listId = event.params.listId
@@ -52,8 +52,8 @@ export function handleListedCredits(event: ListedCreditsEvent): void {
   entity.save()
 }
 
-export function handlePurchasedCredits(event: PurchasedCreditsEvent): void {
-  let entity = new PurchasedCredits(
+export function handlePurchased(event: PurchasedEvent): void {
+  let entity = new Purchased(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.listId = event.params.listId
