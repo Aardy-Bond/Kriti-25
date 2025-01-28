@@ -22,10 +22,10 @@ const P2P = ()=>{
     const {accData ,  setAccData} = context;
 
     const { loading:loadingList, error:errorList, data:dataList , refetch:refetchList } = useQuery(GET_LIST, {
-        variables: { first: 0,skip:0 },
+        variables: { first: 1,skip:0 },
     });
     const { loading:loadingPurchase, error:errorPurchase, data:dataPurchase , refetch:refetchPurchase } = useQuery(GET_PURCHASE, {
-        variables: { first: 0,skip:0 },
+        variables: { first: 1,skip:0 },
     });
 
     //useEffect(() => {
@@ -45,11 +45,13 @@ const P2P = ()=>{
 
 
     useEffect(()=>{
-        if(dataList && dataPurchase) {
-            const purchaseIds = dataPurchase.map((item) => item.listId);
+        console.log(dataPurchase)
+        console.log(dataList)
+        if(dataList?.listeds && dataPurchase?.purchaseds) {
+            const purchaseIds = dataPurchase?.purchaseds.map((item) => item.listId);
 
             // Filter objects in dataList that are not in dataPurchase
-            const uniqueList = dataList.filter(
+            const uniqueList = dataList?.listeds.filter(
                 (item) => !purchaseIds.includes(item.listId)
             );
 
