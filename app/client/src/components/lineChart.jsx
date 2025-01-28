@@ -62,7 +62,7 @@ const LineChart = () => {
                 <p className="text-xl font-medium mb-2">Overview:</p>
             </div>
             <div className="flex">
-                <div className="w-10/12">
+                <div className="w-10/12 h-128">
                     {
                         (() => {
                             try {

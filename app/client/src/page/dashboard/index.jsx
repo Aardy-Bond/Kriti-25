@@ -46,17 +46,30 @@ function Dashboard() {
       <div class="w-full h-full relative z-10  bg-[#191919] bg-opacity-0  shadow-lg ">
 
         <div className="w-[95%] mx-auto fit mt-4 flex gap-4 justify-between">
-          <div className="w-8/12">
-            <LineChart />
+          <div className="flex flex-col w-full">
+            <div className="w-full my-2">
+              <LineChart />
+            </div>
+
+            <div className="w-full mt-2 bg-[#191919] h-fit px-4 py-4 rounded-[10px]">
+              <p className="text-xl">Recent Activities:</p>
+              <div className="w-full mt-4">
+                {notifications.map((notification, index) =>
+                  <div key={index} className="bg-[#202020] flex mb-2 items-center justify-between p-2 rounded-md my-2">
+                    <p className="text-sm font-medium">{notification.msg}</p>
+                    <p className="text-sm font-medium text-[#6B6B6B]">{notification.date}</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="w-4/12">
+          <div className="w-4/12 my-2">
             <PieChart />
           </div>
-        </div>
 
 
-        <div className="w-[95%] mx-auto h-fit mt-4 flex gap-4 py-4">
+        {/* <div className="w-[95%] mx-auto h-fit mt-4 flex gap-4 py-4">
           <div className="w-8/12 bg-[#191919] h-fit px-4 py-4 rounded-[10px]">
             <p className="text-xl">Notifications:</p>
             <div className="w-full mt-4">
@@ -67,9 +80,9 @@ function Dashboard() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
-          <div className="w-4/12 bg-[#191919] h-fit px-4 py-4 rounded-[10px]">
+          {/* <div className="w-4/12 bg-[#191919] h-fit px-4 py-4 rounded-[10px]">
             <p className="text-xl">Trends:</p>
             <div className="w-full mt-4">
               {trends.map((trend, index) =>
@@ -79,12 +92,8 @@ function Dashboard() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
-
-
-
-
       </div>
     </div>
     </>
