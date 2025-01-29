@@ -8,7 +8,7 @@ import client from "./configs/apollo.js";
 
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 
-import { WagmiProvider } from 'wagmi'
+import { WagmiConfig } from 'wagmi'
 import { arbitrum, mainnet } from "viem/chains";
 
 // 1. Get projectId
@@ -18,7 +18,7 @@ export const projectId = "556f704d7102922b2bfd2c6b88c70969";
 export const metadata = {
   name: "web3-modal-setup",
   description: "Web3 Modal Example",
-  icons:"",
+  icons:""
 };
 
 export const chains = [mainnet, arbitrum];
@@ -30,11 +30,11 @@ createWeb3Modal({ wagmiConfig, projectId, chains });
 createRoot(document.getElementById('root')).render(
   <StrictMode>
       <ApolloProvider client={client}>
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiConfig config={wagmiConfig}>
     <ContextProvider>
       <App />
     </ContextProvider>
-    </WagmiProvider>
+    </WagmiConfig>
       </ApolloProvider>
   </StrictMode>,
 )

@@ -105,7 +105,8 @@
   .wallets {
     position: fixed;
     z-index: 100;
-    right: 20px;
+    right: 15px;
+    top: 10px
   }
   
   .create input {
