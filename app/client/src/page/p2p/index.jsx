@@ -12,6 +12,7 @@ import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
 import jsPDF from "jspdf";
 import bgimg from "../../styles/background-image.jpg";
 import Cards from "../../components/cards.jsx";
+import Navbar from "../../components/navbar.jsx";
 
 const P2P = () => {
   const users = [
@@ -40,22 +41,41 @@ const P2P = () => {
   const context = useContext(Context);
   const { accData, setAccData } = context;
 
-  async function getListings() {
-    //use graphQL for this instead
-    try {
-      const res = await GetListings();
-      if (!res) throw new Error("Some Error Occured");
-      setListings(res);
-      setLoading(false);
-    } catch (error) {
-      console.log("Some Error Occured");
-      setLoading(false);
-      setError("Could not Fetch the Market");
+  const { loading:loadingList, error:errorList, data:dataList , refetch:refetchList } = useQuery(GET_LIST, {
+    variables: { first: 1,skip:0 },
+});
+const { loading:loadingPurchase, error:errorPurchase, data:dataPurchase , refetch:refetchPurchase } = useQuery(GET_PURCHASE, {
+    variables: { first: 1,skip:0 },
+});
+
+//useEffect(() => {
+  //  refetch({ first: 0, skip: 0 });
+//}, [refetch]);
+
+useEffect(()=>{
+    if(loadingList || loadingPurchase) setLoading(true);
+    else setLoading('');
+},[loadingList,loadingPurchase]);
+
+useEffect(()=>{
+    if(errorList || errorPurchase) setError(true);
+    else setError(false);
+},[errorPurchase,errorList]);
+
+
+useEffect(()=>{
+    if(dataList?.listeds && dataPurchase?.purchaseds) {
+        const purchaseIds = dataPurchase?.purchaseds.map((item) => item.listId);
+
+        // Filter objects in dataList that are not in dataPurchase
+        const uniqueList = dataList?.listeds.filter(
+            (item) => !purchaseIds.includes(item.listId)
+        );
+
+        setListings(uniqueList);
     }
-  }
-  useEffect(() => {
-    getListings();
-  }, []);
+},[dataList , dataPurchase])
+
 
   const handleHashing = (formData) => {
     const encrypted = CryptoJS.AES.encrypt(
@@ -173,9 +193,11 @@ const P2P = () => {
   };  
   
   return (
+    <>
+    <Navbar/>
     <div
       className="h-screen w-screen p-10"
-      style={{ "background-image": `url(${bgimg})` }}
+      // style={{ "background-image": `url(${bgimg})` }}
     >
       <div className=" flex flex-col bg-[#1e1e1e] bg-opacity-90 rounded-lg">
         <div className="grid grid-cols-5 mt-10 mb-10 h-20 ">
@@ -232,7 +254,7 @@ const P2P = () => {
               {/* {formData.price} */}
               <br />
 
-              <button className="ml-5 mr-5 h-auto cursor-button border-[0px] border-[solid] border-[rgb(187,204,0)] text-[22px] text-[rgb(255,_255,_255)] px-[30px] py-[10px] [transition:300ms] w-[50%] [box-shadow:rgba(14,_30,_37,_0.12)_0px_2px_4px_0px,_rgba(14,_30,_37,_0.32)_0px_2px_16px_0px] rounded-[50px] bg-[rgb(204,_0,_0)] hover:text-[rgb(255,_255,_255)] hover:w-[60%] hover:bg-[rgb(30,_30,_30)_none_repeat_scroll_0%_0%_/_auto_padding-box_border-box] hover:border-[rgb(255,_255,_255)] hover:border-4 hover:border-solid">
+              <button type="submit" className="ml-5 mr-5 h-auto cursor-button border-[0px] border-[solid] border-[rgb(187,204,0)] text-[22px] text-[rgb(255,_255,_255)] px-[30px] py-[10px] [transition:300ms] w-[50%] [box-shadow:rgba(14,_30,_37,_0.12)_0px_2px_4px_0px,_rgba(14,_30,_37,_0.32)_0px_2px_16px_0px] rounded-[50px] bg-[rgb(204,_0,_0)] hover:text-[rgb(255,_255,_255)] hover:w-[60%] hover:bg-[rgb(30,_30,_30)_none_repeat_scroll_0%_0%_/_auto_padding-box_border-box] hover:border-[rgb(255,_255,_255)] hover:border-4 hover:border-solid">
                 SELL
               </button>
             </form>
@@ -275,6 +297,7 @@ const P2P = () => {
       
       
     </div>
+    </>
   );
 };
 export default P2P;
