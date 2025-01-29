@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./page/register/index.jsx";
@@ -10,7 +10,7 @@ import P2P from "./page/p2p/index.jsx";
 import KYC from "./page/kyc/index.jsx";
 import styles from "./styles/Home.module.css";
 
-import { useAccount} from "wagmi";
+import { useAccount } from "wagmi";
 
 function App() {
   const [isNetworkSwitchHighlighted, setIsNetworkSwitchHighlighted] =
@@ -27,6 +27,7 @@ function App() {
 
   useEffect(() => {
     if (isConnected && address) {
+
       setAccData({user:address});
       setIsConnected(isConnected);
     }
@@ -37,35 +38,35 @@ function App() {
   return (
     <>
       <div className="wallets">
-          <header>
-            <div
-              className={styles.backdrop}
-              style={{
-                opacity:
-                  isConnectHighlighted || isNetworkSwitchHighlighted ? 1 : 0,
-              }}
-            />
-            <div className={styles.header}>
-              <div className={styles.buttons}>
-                <div
-                  onClick={closeAll}
-                  className={`${styles.highlight} ${
-                    isNetworkSwitchHighlighted ? styles.highlightSelected : ``
-                  }`}
-                >
-                  <w3m-network-button />
-                </div>
-                <div
-                  onClick={closeAll}
-                  className={`${styles.highlight} ${
-                    isConnectHighlighted ? styles.highlightSelected : ``
-                  }`}
-                >
-                  <w3m-button />
-                </div>
+        <header>
+          <div
+            className={styles.backdrop}
+            style={{
+              opacity:
+                isConnectHighlighted || isNetworkSwitchHighlighted ? 1 : 0,
+            }}
+          />
+          <div className={styles.header}>
+            <div className={styles.buttons}>
+              <div
+                onClick={closeAll}
+                className={`${styles.highlight} ${
+                  isNetworkSwitchHighlighted ? styles.highlightSelected : ``
+                }`}
+              >
+                <w3m-network-button />
+              </div>
+              <div
+                onClick={closeAll}
+                className={`${styles.highlight} ${
+                  isConnectHighlighted ? styles.highlightSelected : ``
+                }`}
+              >
+                <w3m-button />
               </div>
             </div>
-          </header>
+          </div>
+        </header>
       </div>
       <BrowserRouter>
         <Routes>
