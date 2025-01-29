@@ -27,7 +27,8 @@ function App() {
 
   useEffect(() => {
     if (isConnected && address) {
-      setAccData({address:address});
+      console.log(address)
+      setAccData({user:address});
       setIsConnected(isConnected);
     }
   }, [isConnected, address]);
@@ -71,8 +72,13 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/p2p" element={<P2P />} />
+          {
+            isConnected &&
+            (<>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/p2p" element={<P2P />} />
+            </>)
+          }
           <Route path="/kyc" element={<KYC />} />
         </Routes>
       </BrowserRouter>
