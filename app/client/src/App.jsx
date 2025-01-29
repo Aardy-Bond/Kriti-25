@@ -73,7 +73,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/p2p" element={<P2P />} />
-          <Route path="/kyc" element={<KYC />} />
+          <Route path="/" element={<KYC />} />
         </Routes>
       </BrowserRouter>
     </>
