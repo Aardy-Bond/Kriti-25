@@ -29,9 +29,10 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Routes
-app.use("/api/v1/companies", companyRoutes);
+app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Ping endpoint

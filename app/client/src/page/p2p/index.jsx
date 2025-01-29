@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context.jsx";
-import { BuyCredits, GetListings, SellCredits } from "../../apis/p2p.contracts";
+import { BuyCredits, SellCredits } from "../../apis/p2p.contracts";
 // import { SubmitSellProof , SubmitBuyProof } from "../../apis/verifierZK.js";
 import { generateSellProof, generateBuyProof } from "../../configs/snark.js";
 import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from "axios";
 import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";
+import { useQuery } from '@apollo/client';
+import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
 import jsPDF from "jspdf";
 import bgimg from "../../styles/background-image.jpg";
 import Cards from "../../components/cards.jsx";
@@ -168,8 +170,8 @@ const P2P = () => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
-
+  };  
+  
   return (
     <div
       className="h-screen w-screen p-10"
@@ -241,6 +243,8 @@ const P2P = () => {
             ))}
           </div>
         </div>
+        
+        
       </div>
 
       {/* 
@@ -259,6 +263,7 @@ const P2P = () => {
                   <p>{list.price}</p>
                   <p>{list.total}</p>
                   <button onClick={() => handleBuy(list.id)}>Buy</button>
+
                 </div>
               );
             })
@@ -267,6 +272,8 @@ const P2P = () => {
           )}
         </div>
       )} */}
+      
+      
     </div>
   );
 };

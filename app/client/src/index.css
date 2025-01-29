@@ -173,7 +173,81 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-
+ 
+  .container {
+    display: flex;
+    width: 100vw;
+    background-image: url("./styles/background-image.jpg");
+    background-position: center;
+    background-size: cover;
+  }
+  
+  .col2 .login {
+    margin: 10% 0;
+  }
+  
+  form {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .col1 {
+    height: 100vh;
+    background-color: transparent;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    line-height: 100vh;
+  }
+  
+  .col2 {
+    width: 50%;
+  
+    background-color: #1e1e1e;
+    border-radius: 2%;
+  
+    padding: 0 50px;
+    margin: 20px 20px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .submit {
+    color: #535bf2;
+  
+    width: 100%;
+  
+    background-color: blue;
+    color: #ffffff;
+  }
+  
+  .wallets {
+    position: fixed;
+    z-index: 100;
+    right: 15px;
+    top: 10px
+  }
+  
+  .create input {
+    width: 100%;
+    padding:10px ;
+    margin: 5px 0 ;
+  
+    display: block;
+    background-color: #5b5b5b;
+    color: #e2e2e2;
+    border-radius: 10px;
+    /* height: 30px; */
+  }
+  
   button {
     background-color: #f9f9f9;
   }
