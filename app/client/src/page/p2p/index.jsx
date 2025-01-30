@@ -10,9 +10,9 @@ import CryptoJS from "crypto-js";
 import { useQuery } from '@apollo/client';
 import { GET_LIST,GET_PURCHASE } from "../../graphql/queries";
 import jsPDF from "jspdf";
-import bgimg from "../../styles/background-image.jpg";
 import Cards from "../../components/cards.jsx";
 import Navbar from "../../components/navbar.jsx";
+import { SocketContext } from "../../context/socket.jsx";
 
 const P2P = () => {
   const users = [
@@ -28,6 +28,11 @@ const P2P = () => {
     ["user10", "47 units", "1.13eth"],
     ["user11", "47 units", "1.13eth"],
     ["user12", "47 units", "1.13eth"],
+    ["user12", "47 units", "1.13eth"],
+    ["user12", "47 units", "1.13eth"],
+    ["user12", "47 units", "1.13eth"],
+    ["user12", "47 units", "1.13eth"],
+    ["user12", "47 units", "1.13eth"],
   ];
 
   const [listings, setListings] = useState([]);
@@ -39,7 +44,9 @@ const P2P = () => {
     totalPrice: 0,
   });
   const context = useContext(Context);
-  const { accData, setAccData } = context;
+  const { accData, setAccData , isConnected} = context;
+  const socketContext = useContext(SocketContext);
+  const {socketId} = socketContext;
 
   const { loading:loadingList, error:errorList, data:dataList , refetch:refetchList } = useQuery(GET_LIST, {
     variables: { first: 1,skip:0 },
@@ -48,9 +55,9 @@ const { loading:loadingPurchase, error:errorPurchase, data:dataPurchase , refetc
     variables: { first: 1,skip:0 },
 });
 
-//useEffect(() => {
-  //  refetch({ first: 0, skip: 0 });
-//}, [refetch]);
+useEffect(() => {
+   console.log(isConnected)
+}, [isConnected]);
 
 useEffect(()=>{
     if(loadingList || loadingPurchase) setLoading(true);
@@ -86,11 +93,6 @@ useEffect(()=>{
   };
 
   async function handleIPFSUpdate() {
-    //get the recent credits from the iot contract-d
-    //update the accData in the client-d
-    //proceed with the handleBuy()-d
-    //after the transaction's success, update the data on the IPFS-d
-    //finally update in the contract
     let data = {
       ...accData,
       carbonCredits: accData.carbonCredits - formData.units,
@@ -134,7 +136,7 @@ useEffect(()=>{
     doc.save(`receipt-${Date.now()}.pdf`);
   }
 
-  async function handleBuy(listId) {
+  async function handleBuy(index) {
     const carbonCredits = GetCredits({
       iots: accData.iot,
       address: accData.user,
@@ -148,18 +150,15 @@ useEffect(()=>{
       limit: accData.creditsLimit || 150,
     });
     if (!res) return;
-    const proof = {
-      ...res.proof,
-      pi_a: [res.proof.pi_a[0], res.proof.pi_a[1]],
-      pi_b: [res.proof.pi_b[0], res.proof.pi_b[1]],
-      pi_c: [res.proof.pi_c[0], res.proof.pi_c[1]],
-    };
     // res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],action:'buy'});
     // if(!res) return;
-    res = await BuyCredits({ listId, address: accData.user });
+    res = await BuyCredits({ listId:listings[index].listId, address: accData.user });
     if (!res) return;
     await handleIPFSUpdate();
     generateReceipt(res);
+    if(socketId) {
+      socketId.emit('trade' , `Anonymous bought ${listings[listId].units} credits, each for ${listings[listId].price}`)
+    }
   }
 
   async function handleSell() {
@@ -173,12 +172,6 @@ useEffect(()=>{
       units: formData.units,
     });
     if (!res) return;
-    const proof = {
-      ...res.proof,
-      pi_a: [res.proof.pi_a[0], res.proof.pi_a[1]],
-      pi_b: [res.proof.pi_b[0], res.proof.pi_b[1]],
-      pi_c: [res.proof.pi_c[0], res.proof.pi_c[1]],
-    };
     // res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],action:'sell'});
     // if(!res) return;
     console.log(accData);
@@ -196,19 +189,19 @@ useEffect(()=>{
     <>
     <Navbar/>
     <div
-      className="h-screen w-screen p-10"
+      className="h-screen w-screen p-10 mt-[50px]"
       // style={{ "background-image": `url(${bgimg})` }}
     >
       <div className=" flex flex-col bg-[#1e1e1e] bg-opacity-90 rounded-lg">
-        <div className="grid grid-cols-5 mt-10 mb-10 h-20 ">
+        {/* <div className="grid grid-cols-5 mt-10 mb-10 h-20 ">
           <div></div>
           <div className=" rounded-lg bg-gradient-to-r from-[#494747]  to-[#272727] h-26"></div>
           <div></div>
           <div className=" rounded-lg bg-gradient-to-r from-[#494747]  to-[#272727] h-26"></div>
           <div></div>
-        </div>
-        <div className="grid grid-cols-4 min-h-[40vw] p-10">
-          <div className="justify-center flex flex-col">
+        </div> */}
+        <div className="flex justify-between min-h-[40vw] p-10">
+          <div className="justify-center w-[20vw] flex flex-col">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -259,43 +252,19 @@ useEffect(()=>{
               </button>
             </form>
           </div>
-          <div className="grid grid-cols-3 gap-4 col-span-3">
-            {users.map(([uname, eth, percent]) => (
-              <Cards key={uname} uname={uname} eth={eth} percent={percent} />
-            ))}
+
+          <div className="h-[70vh] flex overflow-y-auto">
+            <div className="grid grid-cols-3 gap-4 col-span-3">
+              {users.map(([uname, eth, percent] , index) => (
+                <Cards key={index} uname={uname} eth={eth} percent={percent} />
+              ))}
+            </div>
           </div>
+
         </div>
         
         
-      </div>
-
-      {/* 
-
-      <div style={{ color: "red" }}>{error}</div>
-
-      {loading ? (
-        <>Loading the Market...</>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          {listings.length <= 0 ? (
-            listings.map((list, index) => {
-              return (
-                <div key={index}>
-                  <p>{list.units}</p>
-                  <p>{list.price}</p>
-                  <p>{list.total}</p>
-                  <button onClick={() => handleBuy(list.id)}>Buy</button>
-
-                </div>
-              );
-            })
-          ) : (
-            <h1>Market is Empty</h1>
-          )}
-        </div>
-      )} */}
-      
-      
+      </div>      
     </div>
     </>
   );

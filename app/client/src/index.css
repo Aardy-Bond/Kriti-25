@@ -14,7 +14,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
  */
+/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+*::-webkit-scrollbar {
+  display: none;
+}
 
+/* Hide scrollbar for Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for Edge and IE */
+* {
+  -ms-overflow-style: none;
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -49,9 +62,9 @@ a:hover {
 .container {
   display: flex;
   width: 100vw;
-  background-image: url("./styles/background-image.jpg");
-  background-position: center;
-  background-size: cover;
+  /* background-image: url("./styles/background-image.jpg"); */
+  /* background-position: center;
+  background-size: cover; */
 }
 
 .col2 .login {
@@ -104,7 +117,8 @@ form {
 .wallets {
   position: fixed;
   z-index: 100;
-  right: 20px;
+  right: 15px;
+  top: 0px;
 }
 
 .create input {
@@ -177,9 +191,9 @@ button:focus-visible {
   .container {
     display: flex;
     width: 100vw;
-    background-image: url("./styles/background-image.jpg");
-    background-position: center;
-    background-size: cover;
+    /* background-image: url("./styles/background-image.jpg"); */
+    /* background-position: center;
+    background-size: cover; */
   }
   
   .col2 .login {

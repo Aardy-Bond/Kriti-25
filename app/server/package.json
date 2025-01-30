@@ -20,9 +20,11 @@
     "mongoose": "^8.9.5",
     "mqtt": "^5.10.3",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
     "pinata": "^1.10.1",
     "pinata-web3": "^0.5.4",
+    "redis": "^4.7.0",
     "socket.io": "^4.8.1"
   }
 }

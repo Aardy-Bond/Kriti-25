@@ -4,28 +4,6 @@ import {nftContractAddress , NFT_ABI} from '../configs/constants.js'
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(NFT_ABI , nftContractAddress);
 
-export const GetListings = async({address})=>{ //will be replaced by GraphQL
-    try {
-        const gasLimit = BigInt(await contract.methods.getListings().estimateGas({
-            from: address
-        }));
-    
-        console.log(gasLimit);
-        let listings = await contract.methods.getListings().call({
-            from: address,
-            gas:gasLimit.toString()
-        })
-        listings = JSON.stringify(listings , (key,value)=>{
-            typeof value === 'bigint'?Number(value):value
-        })
-        //this returns a map. we need to convert it to an array
-        console.log(`Transaction Successful\n${listings}`);
-        return listings;
-    } catch (error) {
-        console.log(`Transaction Unsuccessfull\n${error}`);
-        return false;
-    }
-}
 
 export const SellCredits = async({data,address})=>{
     try {

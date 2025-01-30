@@ -10,6 +10,7 @@ import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 
 import { WagmiConfig } from 'wagmi'
 import { arbitrum, mainnet } from "viem/chains";
+import { SockerContextProvider } from './context/socket.jsx'
 
 // 1. Get projectId
 export const projectId = "556f704d7102922b2bfd2c6b88c70969";
@@ -32,7 +33,9 @@ createRoot(document.getElementById('root')).render(
       <ApolloProvider client={client}>
     <WagmiConfig config={wagmiConfig}>
     <ContextProvider>
+      <SockerContextProvider>
       <App />
+      </SockerContextProvider>
     </ContextProvider>
     </WagmiConfig>
       </ApolloProvider>

@@ -70,7 +70,7 @@ const Register = () => {
 
   return (
     <>
-      <div className="container">
+      <div className="flex w-[100vw]">
         <div className="col1">
           <img src={logo} alt="" />
         </div>

@@ -8,14 +8,14 @@ const char* password = "wifi_password";
 
 
 const char* mqtt_server = "server_name of hiveMQ";
-const int mqtt_port = 88888 ; //port; 
+const int mqtt_port = 8883 ; 
 const char* mqtt_user = "username on hiveMQ";
 const char* mqtt_pass = "password on hiveMQ";
 
 
-String strollerId = "stroller_001";
-String topicData = "stroller/" + strollerId + "/data";
-String topicCommands = "backend/" + strollerId + "/commands";
+String iotId = "stl_0_1000";
+String topicData = "iots/" + iotId + "/data";
+String topicCommands = "backend/" + iotId + "/commands";
 
 
 const char* ca_cert = \
@@ -51,7 +51,7 @@ void loop() {
   }
   client.loop();
   publishData();
-  delay(3600);
+  delay(1);
 }
 
 void setup_wifi() {
@@ -99,11 +99,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void publishData() {
   StaticJsonDocument<256> doc;
-  doc["carbonEmission"] = 100;
-  doc["company"] = "ABC Limited";
+  doc["carbonCredits"] = 100;
+  doc["identifier"] = iotId;
 
   char jsonBuffer[512];
   size_t n = serializeJson(doc, jsonBuffer);
-  client.publish(topicData.c_str(), jsonBuffer, n);
+  client.publish(topicData.c_str(), jsonBuffer, n , true);
   Serial.println("Published data");
 }

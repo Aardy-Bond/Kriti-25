@@ -1,4 +1,4 @@
-import Web3, { errors } from 'web3';
+import Web3 from 'web3';
 import {iotContractAddress , IOT_ABI} from '../configs/constants.js'
 
 const web3 = new Web3(window.ethereum);

@@ -57,16 +57,17 @@ const LineChart = () => {
 
 
     return (
-        <div className="flex flex-col bg-[#191919]  text-white p-4 rounded-lg shadow-lg">
-            <div className="flex justify-between items-center">
-                <p className="text-xl font-medium mb-2">Overview:</p>
+        <div className="flex flex-col bg-[#191919] h-[55vh] text-white p-4 rounded-lg shadow-lg">
+            <div className="flex justify-between items-center h-2/12">
+                <p className="text-xl font-medium mb-2">Smart Meters Measurements:</p>
             </div>
-            <div className="flex">
-                <div className="w-10/12 h-128">
+            <div className="flex h-full">
+                <div className="w-10/12 h-full">
                     {
                         (() => {
                             try {
-                                return <Line data={chartType === 'days' ? chartDataDays : chartType === 'months' ? chartDataMonth : chartDataYear} />;
+                                return <Line data={chartType === 'days' ? chartDataDays : chartType === 'months' ? chartDataMonth : chartDataYear} 
+                                options={{ maintainAspectRatio: false }} width={2000}/>;
                             } catch (error) {
                                 console.error("Chart rendering error:", error);
                                 return null;
