@@ -13,6 +13,8 @@ import jsPDF from "jspdf";
 import Cards from "../../components/cards.jsx";
 import Navbar from "../../components/navbar.jsx";
 import { SocketContext } from "../../context/socket.jsx";
+import Dialog from "../../components/dailog.jsx";
+import Loader from "../../components/loader.jsx";
 
 const P2P = () => {
   const users = [
@@ -43,6 +45,8 @@ const P2P = () => {
     units: 0,
     totalPrice: 0,
   });
+  const [dialogProps , setDialogProps] = useState({});
+  const [openDialog , setOpenDialog] = useState(false);
   const context = useContext(Context);
   const { accData, setAccData , isConnected} = context;
   const socketContext = useContext(SocketContext);
@@ -188,6 +192,7 @@ useEffect(()=>{
   return (
     <>
     <Navbar/>
+   { openDialog &&  <Dialog msg={dialogProps.msg} closefn={dialogProps.closefn} callback={dialogProps.callback}/>}
     <div
       className="h-screen w-screen p-10 mt-[50px]"
       // style={{ "background-image": `url(${bgimg})` }}
@@ -205,7 +210,6 @@ useEffect(()=>{
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSell();
               }}
               className="w-full pr-10"
             >
@@ -247,18 +251,34 @@ useEffect(()=>{
               {/* {formData.price} */}
               <br />
 
-              <button type="submit" className="ml-5 mr-5 h-auto cursor-button border-[0px] border-[solid] border-[rgb(187,204,0)] text-[22px] text-[rgb(255,_255,_255)] px-[30px] py-[10px] [transition:300ms] w-[50%] [box-shadow:rgba(14,_30,_37,_0.12)_0px_2px_4px_0px,_rgba(14,_30,_37,_0.32)_0px_2px_16px_0px] rounded-[50px] bg-[rgb(204,_0,_0)] hover:text-[rgb(255,_255,_255)] hover:w-[60%] hover:bg-[rgb(30,_30,_30)_none_repeat_scroll_0%_0%_/_auto_padding-box_border-box] hover:border-[rgb(255,_255,_255)] hover:border-4 hover:border-solid">
+              <button type="submit" onClick={()=>{
+                setOpenDialog(true)
+                setDialogProps({
+                  msg:`Sure to sell ${formData.units} credits for ${formData.price} eth each?`,
+                  closefn:setOpenDialog,
+                  callback:handleSell
+                })
+              }}
+              className="ml-5 mr-5 h-auto cursor-button border-[0px] border-[solid] border-[rgb(187,204,0)] text-[22px] text-[rgb(255,_255,_255)] px-[30px] py-[10px] [transition:300ms] w-[50%] [box-shadow:rgba(14,_30,_37,_0.12)_0px_2px_4px_0px,_rgba(14,_30,_37,_0.32)_0px_2px_16px_0px] rounded-[50px] bg-[rgb(204,_0,_0)] hover:text-[rgb(255,_255,_255)] hover:w-[60%] hover:bg-[rgb(30,_30,_30)_none_repeat_scroll_0%_0%_/_auto_padding-box_border-box] hover:border-[rgb(255,_255,_255)] hover:border-4 hover:border-solid">
                 SELL
               </button>
             </form>
           </div>
 
           <div className="h-[70vh] flex overflow-y-auto">
-            <div className="grid grid-cols-3 gap-4 col-span-3">
-              {users.map(([uname, eth, percent] , index) => (
-                <Cards key={index} uname={uname} eth={eth} percent={percent} />
-              ))}
-            </div>
+              {
+                loading? (
+                  <div className="w-[70vw] flex justify-center items-center">
+                  <Loader/>
+                  </div>
+                ):(
+                  <div className="grid grid-cols-3 gap-4 col-span-3">
+                  {users.map(([uname, eth, percent] , index) => (
+                    <Cards key={index} uname={uname} eth={eth} percent={percent} />
+                  ))}
+                </div>
+                )
+              }
           </div>
 
         </div>
