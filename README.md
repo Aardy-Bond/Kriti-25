@@ -2,18 +2,18 @@
 # CarbonX
 #### About CarbonX
 
-# Complete Idea with a Business Model and Go-To Market Strategy
+## Complete Idea with a Business Model and Go-To Market Strategy
 #### Here's a [ppt](https://github.com/) about the entire project
 
-# 💻 TechStack Used
+## 💻 TechStack Used
 #### <ul><li>JavaScript</li><li>Solidity</li><li>Circom</li><li>ReactJS</li><li>TailwindCSS</li><li>NodeJS</li><li>Web3.js</li><li>MongoDB</li><li>IPFS</li><li>PinataSDK</li><li>GraphQL</li><li>SocketIO</li><li>ZK Snarks</li></ul>
 
 
-# 🚀 Features
+## 🚀 Features
 
 
 ## ⚙️ Setting up the Project locally
-## Prerequisites
+### Prerequisites
 #### Node.js should be installed on your system
 #### An account on IPFS and PinataSDK
 #### Either MongoDB should be available on your local or make a account in MongoAtlas to use it without dowloading
@@ -24,18 +24,18 @@
 #### Arduino IDE installed on the computer with which the ESP32 microcontroller will be connected using MicroUSB cable
 #### <ul><li>[Node.js](https://nodejs.org/en/)</li><li>[MetaMask extension](https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm)</li><li>[MongoDB(local)](https://www.mongodb.com/docs/manual/installation/)</li><li>[MongoAtlas(Cloud)](https://www.youtube.com/watch?v=VkXvVOb99g0)</li><li>[IPFS](https://merrillinsurance.ipfs.com/)</li><li>[PinataSDK](https://pinata.cloud/)</li><li>[HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker/)</li><li>[Cloudinary](https://cloudinary.com/users/login)</li></ul>
 
-## Setting up the frontend
+### Setting up the frontend
 ```
 cd app/client
 npm install
 ```
-## Setting up the backend
+### Setting up the backend
 ```
 cd app/server
 npm install
 ```
 
-## 🎪 Setting up .env Variables
+### 🎪 Setting up .env Variables
 
 #### First we need to configure a .env file for secret variables used in the sever side of this project
 
@@ -63,7 +63,7 @@ api_secret= " credentials of cloudinary "
 api_key= " credentials of cloudinary "
 cloud_name= " credentials of cloudinary "
 ```
-## Starting the project locally
+### Starting the project locally
 #### in app/client, below starts the client-side React+Vite application
 ```
 npm run build
@@ -72,7 +72,7 @@ npm run prod
 #### in app/server, below starts the server-side Node+Express application
 
 
-# 📂 Directory Structure
+## 📂 Directory Structure
 ```
 ├── README.md                   <- Project overview and instructions
 ├── .gitignore                  <- Files/folders not pushed on github
@@ -126,15 +126,15 @@ npm run prod
 ```
 
 
-# 🐛 Bug Reporting
+## 🐛 Bug Reporting
 #### Feel free to [open an issue](https://github.com/) on GitHub if you find any bug.
 
 <br />
 
-# ⭐ Feature Suggestion
+## ⭐ Feature Suggestion
 #### Feel free to [open an issue](https://github.com/) on GitHub if you have feature idea to be added 🙌.
 
-# 🧩 Team
+## 🧩 Team
 #### <ul><li>[Srinjoy](https://github.com/)</li><li>[Kevin](https://github.com/)</li><li>[Yash](https://github.com/)</li><li>[Shreyansh](https://github.com/)</li></ul>
 
 ```
