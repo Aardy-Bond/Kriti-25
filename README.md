@@ -135,7 +135,7 @@ npm run prod
 #### Feel free to [open an issue](https://github.com/) on GitHub if you have feature idea to be added 🙌.
 
 ## 🧩 Team
-#### <ul><li>[Srinjoy](https://github.com/)</li><li>[Kevin](https://github.com/)</li><li>[Yash](https://github.com/)</li><li>[Shreyansh](https://github.com/)</li></ul>
+#### <ul><li>[Srinjoy](https://github.com/)</li><li>[Kevin](https://github.com/)</li><li>[Yash](https://github.com/)</li><li>[Shreyansh](https://github.com/)</li><li>[Dev](https://github.com/)</li><li>[Ayushmann](https://github.com/)</li></ul>
 
-```
+
 Thanks for visiting my repository 😊!! Please give a star ⭐ if you liked our project.

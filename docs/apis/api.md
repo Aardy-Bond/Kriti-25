@@ -1,6 +1,11 @@
-company :
-api/v1/company/register  - 200/400/500
-api/v1/company/signin/:cid  - 200/400/500
+# API Routes
 
-iot:
-api/v1/iot/  - 200/400
+## Company Routes (`/api/v1/company`)
+
+- `POST /register`: Registers a new company.
+- `GET /signin/:cid`: Sign in a company using its ID (`cid`).
+
+## Dashboard Routes (`/api/v1/dashboard`)
+
+- `GET /getCompanyData`: Fetches the data related to the KYC verification of the company
+- `POST /upload`: Handles file upload for the KYC verification
