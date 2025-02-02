@@ -23,6 +23,7 @@ function App() {
   };
 
   const context = useContext(Context);
+  const { setAccData, setIsConnected } = context;
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -36,8 +37,6 @@ function App() {
       setIsConnected(false);
     }
   }, [isConnected, address]);
-
-  const { setAccData, setIsConnected } = context;
 
   return (
     <>

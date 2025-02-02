@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { RegisterBusiness } from "../../apis/auth.contracts.js";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import logo from "../../assets/logo.png";
+import { Context } from "../../context/context.jsx";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,10 +14,13 @@ const Register = () => {
     country: "",
     sector: "",
     yearOfEstablishment: "",
-    user: "",
+    iots: "",
   });
 
   const [key, setKey] = useState("");
+
+  const context = useContext(Context);
+  const {accData} = context;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,14 +40,24 @@ const Register = () => {
       if (
         !formData.country.trim() ||
         !formData.businessName.trim() ||
-        !formData.user.trim() ||
         !formData.sector.trim() ||
+        !formData.iots.trim() ||
+        !formData.unitsProd.trim() ||
         !formData.yearOfEstablishment.trim() ||
         !key.trim()
-      )
-        return;
+      ) return;
+      const iotArray = formData.iots.split(',').map((iot)=>iot.trim());
+      setFormData((prevFormData)=>(
+        {
+          ...prevFormData ,
+          carbonCredits:100,
+          creditsLimit:100,
+          activity:0,
+          iots:iotArray,
+          user: accData.user
+        }
+       ))
       const data = handleHashing(formData);
-      console.log(data);
       const res = await axios.post(
         "http://localhost:3000/api/v1/company/register",
         { data: data },
@@ -54,7 +68,6 @@ const Register = () => {
         }
       );
       if (res.status === 500) throw new Error("Not Uploaded to IPFS");
-      // send the data to the admin side for verification(to be done afterwards)
       const transaction = await RegisterBusiness({
         data: res.data.data,
         formData: formData,
@@ -91,6 +104,12 @@ const Register = () => {
             <label>Enter your Sector</label>
             <input type="text" name="sector" onChange={handleChange} required />
 
+            <label>Enter your Smart Meter Identifiers(separated by commas(,))</label>
+            <input type="text" name="iots" onChange={handleChange} required />
+
+            <label>Enter your Amount of Power Consumed per year(in KWh)</label>
+            <input type="text" name="unitProd" onChange={handleChange} required />
+
             <label>Enter your year established</label>
             <input
               type="date"
@@ -98,9 +117,6 @@ const Register = () => {
               onChange={handleChange}
               required
             />
-
-            <label>Enter your Metamask Wallet Address</label>
-            <input type="text" name="user" onChange={handleChange} required />
 
             <label>Enter a private key</label>
             <input
