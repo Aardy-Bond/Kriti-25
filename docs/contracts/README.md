@@ -68,30 +68,39 @@ This contract manages the credit values associated with IoT devices. It stores c
 ## Variables
 
 ### `iot (Mapping)`
-- **Type**: `mapping(string => uint256)`
-- **Description**: This private mapping stores the relationship between a unique string identifier (e.g., device or sensor ID) and a corresponding credit value (represented as `uint256`).
+- **Type**: `mapping(string => uint256[])`
+- **Description**: This private mapping stores the relationship between a unique string identifier (e.g., device or sensor ID) and an array of corresponding credit values (represented as `uint256[]`).
 
 ## Functions
 
 ### `getByIdentifier`
 - **Parameters**: 
-    - `_identifier (string memory)`: The identifier (e.g., device ID) used to look up the stored credit value.
+    - `_identifier (string memory)`: The identifier (e.g., device ID) used to look up the stored credit values.
 - **Return**: 
-    - Returns the credit value associated with the provided identifier, of type `uint256`.
+    - Returns an array of credit values associated with the provided identifier, of type `uint256[]`.
 - **Description**: 
-    - This external view function allows retrieval of the credit value associated with a given identifier from the `iot` mapping.
+    - This external view function allows retrieval of the credit values associated with a given identifier from the `iot` mapping.
 
 ### `updateCredits`
 - **Parameters**: 
-    - `_credits (uint256)`: The new credit value to be assigned to the specified identifier.
-    - `_identifier (string memory)`: The identifier whose credit value needs to be updated.
+    - `_credits (uint256)`: The new credit value to be appended for the specified identifier.
+    - `_identifier (string memory)`: The identifier whose credit values need to be updated.
 - **Description**: 
-    - This external function updates the credit value for the specified identifier.
+    - This external function appends a new credit value for the specified identifier.
     - **Requirements**: 
-        - The identifier should already exist in the `iot` mapping, i.e., it should not be zero.
-        - The action must not result in a redundant update where the current credit value and the new credit value are the same.
+        - The identifier should already exist in the `iot` mapping (i.e., it should have at least one stored credit value).
+        - The action must not result in a redundant update where the last stored credit value and the new credit value are the same.
 - **Error Messages**:
-    - `"Invalid Identifier"`: Thrown if the identifier doesn't exist (i.e., its associated value is zero).
-    - `"Redundant action"`: Thrown if the provided credit value equals the current value, indicating no update is needed.
+    - `"Invalid Identifier"`: Thrown if the identifier doesn't exist (i.e., it has no associated values).
+    - `"Redundant action"`: Thrown if the provided credit value equals the last stored value, indicating no update is needed.
 
-
+### `initializeIdentifier`
+- **Parameters**:
+    - `_identifier (string memory)`: The unique identifier for the IoT device.
+    - `_initialCredit (uint256)`: The initial credit value to be stored.
+- **Description**:
+    - This external function initializes a new identifier with an initial credit value.
+    - **Requirements**:
+        - The identifier must not already exist in the mapping.
+- **Error Messages**:
+    - `"Identifier already exists"`: Thrown if the identifier is already present in the mapping.

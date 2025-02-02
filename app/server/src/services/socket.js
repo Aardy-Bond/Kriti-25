@@ -18,7 +18,7 @@ io.on('connection' , (socket)=>{
         io.emit('trade' , msg);
         let activities = await RedisGet({key:'activities'});
         activities = JSON.parse(activities);
-        activites.push(msg);
+        activities.push(msg);
         await RedisSet({key:'activities',value:JSON.stringify(activities)});
     })
 
@@ -31,5 +31,5 @@ io.on('connection' , (socket)=>{
 
 export async function BroadcastData(data) {
     if(!socketMap[data.identifier]) return;
-    io.to(socketMap[data.identifier]).emit('data' , data.carbonCredits);
+    io.to(socketMap[data.identifier]).emit('data' , data);
 }

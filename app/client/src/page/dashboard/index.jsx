@@ -1,30 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context.jsx";
-import { notifications } from "./fakeData/notificatiosn";
 import PieChart from "../../components/pieChart.jsx";
 import LineChart from "../../components/lineChart.jsx";
 import Navbar from "../../components/navbar.jsx";
 import { SocketContext } from "../../context/socket.jsx"
 import { backendUrl } from "../../configs/constants.js";
+import { GetCredits } from "../../apis/iot.contracts.js";
 
 function Dashboard() {
 
     const context = useContext(Context);
-    const {accData , isConnected} = context;
+    const {accData , setAccData , isConnected  , setIotData , iotData} = context;
     const socketContext = useContext(SocketContext);
     const {socketId , setSocketId} = socketContext;
     const iots = [accData.iots];
     const [activities , setActivities] = useState([]);
-    const [data , setData] = useState([]); //use this to store the data of the iot in the daywise 
 
-    // useEffect(()=>{
-    //   setActivities(notifications)
-    // },[])
 
-    async function getCreditsTillYesterday() {
-      //call the GetCredits contract and update the data in the line chart accordingly
-      //remember to consider for all the iot devices and display the sum of all the iot daywise
-    }
+    const getCreditsTillYesterday = useMemo(() => async () => {
+      let temp
+      await Promise.all(
+        iots.map(async (iot) => {
+         temp[iot] = await GetCredits({ iot, address: accData.user })
+        })
+      );
+      
+      setIotData(temp);
+    }, [iots]); 
+    
+    useEffect(() => {
+      getCreditsTillYesterday();
+    }, [getCreditsTillYesterday]); 
 
     function socketInit(){
       try {
@@ -66,9 +72,25 @@ function Dashboard() {
           console.log("New trade received:", msg);
         });
 
-        newSocket.on("data", (carbonCredits) => {
-          //update the today credits in the data sent to the line chart.
-          console.log("Received carbon credits data:", carbonCredits);
+        newSocket.on("data", (data) => { //this is how much it has consumed, whereas in accData i am storing how much is left
+          setIotData((prevIotData) => {
+            let tempData = new Map(prevIotData); 
+            let history = [...tempData.get(data.identifier)]; 
+            history[history.length - 1] = carbonCredits; 
+            tempData.set(data.identifier, history);
+          
+            let consumption = 0;
+            tempData.forEach((value) => {
+              consumption += value[value.length - 1]; 
+            });
+          
+            setAccData((prevAccData) => ({
+              ...prevAccData, carbonCredits:prevAccData.limit - prevAccData.activity - consumption
+            }));
+
+            return tempData;
+          });
+          console.log("Received carbon credits data:", data);
         });
 
       } catch (error) {

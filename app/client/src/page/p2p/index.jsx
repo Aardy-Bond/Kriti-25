@@ -88,19 +88,21 @@ useEffect(()=>{
 },[dataList , dataPurchase])
 
 
-  const handleHashing = (formData) => {
+  const handleHashing = (data) => {
     const encrypted = CryptoJS.AES.encrypt(
-      JSON.stringify(formData),
+      JSON.stringify(data),
       accData.key
     ).toString();
     return encrypted;
   };
 
-  async function handleIPFSUpdate() {
+  async function handleIPFSUpdate(change) {
     let data = {
       ...accData,
-      carbonCredits: accData.carbonCredits - formData.units,
+      carbonCredits: accData.carbonCredits + change,
+      activity: activity + change
     };
+    setAccData(data);
     delete data.key;
     const hashed = handleHashing(data);
     const res = await axios.post(
@@ -124,15 +126,15 @@ useEffect(()=>{
   }
 
   function generateReceipt(res) {
-    res = {
+    let response = {
       ...res,
-      units: formData.units,
+      units: listings[index].units,
       date: Date.now(),
-      price_per_credit: formData.price,
-      totalPrice: formData.totalPrice,
+      price_per_credit: listings[index].price,
+      totalPrice: listings[index].totalPrice,
     };
     const doc = new jsPDF();
-    const formattedData = JSON.stringify(res, null, 2);
+    const formattedData = JSON.stringify(response, null, 2);
     doc.setFont("Courier", "normal");
     doc.text("Receipt Data:", 10, 10);
     doc.text(formattedData, 10, 20);
@@ -141,16 +143,16 @@ useEffect(()=>{
   }
 
   async function handleBuy(index) {
-    const carbonCredits = GetCredits({
-      iots: accData.iot,
-      address: accData.user,
-    });
-    // const carbonCredits = 100;
-    if (!carbonCredits) return;
-    setAccData({ ...accData, carbonCredits: carbonCredits });
-    res = await generateBuyProof({
+    // const carbonCredits = GetCredits({
+    //   iots: accData.iot,
+    //   address: accData.user,
+    // });
+    // const carbonCredits = ;
+    // if (!carbonCredits) return;
+    // setAccData({ ...accData, carbonCredits: carbonCredits });
+    let res = await generateBuyProof({
       balance: accData.carbonCredits || 100,
-      units: formData.units,
+      units: listings[index].units,
       limit: accData.creditsLimit || 150,
     });
     if (!res) return;
@@ -158,8 +160,8 @@ useEffect(()=>{
     // if(!res) return;
     res = await BuyCredits({ listId:listings[index].listId, address: accData.user });
     if (!res) return;
-    await handleIPFSUpdate();
-    generateReceipt(res);
+    await handleIPFSUpdate(listings[index].units*(-1));
+    generateReceipt(res,index);
     if(socketId) {
       socketId.emit('trade' , `Anonymous bought ${listings[listId].units} credits, each for ${listings[listId].price}`)
     }
@@ -167,9 +169,9 @@ useEffect(()=>{
 
   async function handleSell() {
     // let carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
-    let carbonCredits = 100;
-    if (!carbonCredits) return;
-    setAccData({ ...accData, carbonCredits: carbonCredits });
+    // let carbonCredits = 100;
+    // if (!carbonCredits) return;
+    // setAccData({ ...accData, carbonCredits: carbonCredits });
     formData.totalPrice = formData.price * formData.units;
     let res = await generateSellProof({
       balance: accData.carbonCredits || 100,
@@ -178,10 +180,9 @@ useEffect(()=>{
     if (!res) return;
     // res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],action:'sell'});
     // if(!res) return;
-    console.log(accData);
     res = await SellCredits({ data: formData, address: accData.user });
     if (!res) return;
-    await handleIPFSUpdate();
+    await handleIPFSUpdate(formData.units);
   }
 
   const handleChange = async (e) => {

@@ -4,17 +4,12 @@ import {iotContractAddress , IOT_ABI} from '../configs/constants.js'
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(IOT_ABI , iotContractAddress);
 
-export const GetCredits=async({iots,address}) =>{
+export const GetCredits=async({iot,address}) =>{
     try {
-        let sum = 0;
-        iots.forEach(async (identifier) => {
-            let credits = await contract.methods.getByIdentifier(identifier).call({
-                from:address
-            });
-            console.log(credits);
-            sum=sum+credits;
-        })
-        console.log('Transaction Successful',sum);
+        let credits = await contract.methods.getByIdentifier(iot).call({
+            from:address
+        });
+        console.log('Transaction Successful',credits);
         return sum;
     } catch (error) {
         console.log('Transaction failed to fetch carbon credits',error);
