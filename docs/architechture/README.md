@@ -37,7 +37,7 @@ When a company registers on the platform, the following steps are followed:
 - The Smart NFT is made non-transferable ensuring it is not mistakenly transfered to someone else.
 - **No Sensitive Data** is stored On Chain.
 
----
+
 
 ### 2. Company Login & Verification
 
@@ -56,6 +56,11 @@ At the time of login, the platform verifies the company’s identity using the N
 
 - If the decrypted data matches and is parsed properly, the company successfully logs in.
 - If not, access is denied.
+
+
+## Conclusion
+
+This decentralized platform ensures secure registration and verification processes through the integration of CryptoJS, IPFS, and NFTs. By utilizing blockchain technology, the system maintains transparency, security, and ease of access for both registration and login.
 
 ---
 
@@ -101,3 +106,51 @@ The IoT-Smart Grid integration platform enables secure, transparent, and decentr
 
 This IoT-Smart Grid integration platform provides a secure, transparent, and decentralized solution for monitoring energy consumption in industrial settings. By combining MQTT, WebSockets, and blockchain technology, the platform ensures real-time updates, data immutability, and enhanced security while maintaining privacy for the companies involved.
 
+---
+
+# Peer-to-Peer Carbon Credit Trading
+
+## Overview
+
+The Peer-to-Peer (P2P) Carbon Credit Trading system enables companies to securely list and purchase carbon credits while maintaining privacy and preventing market monopolization. The platform utilizes **ZK-SNARKs** for confidential verification, **on-chain event emissions** for transparency, and **The Graph** for efficient querying.
+
+<img src="../public/a4.png"/>
+
+## Workflow
+
+### 1. Listing Carbon Credits
+- A company initiates a request to list a certain number of carbon credits for sale.
+- Before the listing is approved, the system verifies whether the listed credits **do not exceed** the company’s current balance.
+- This verification is performed using **ZK-SNARKs**, ensuring that:
+  - The company's **carbon credit balance remains private**.
+  - Only **proofs and public signals** are exposed for verification.
+- Upon successful verification, the credits are added to the **on-chain listings**.
+- An **event is emitted** containing the following parameters:
+  - `listId`
+  - `units` (number of credits)
+  - `pricePerCredit`
+  - `totalPrice`
+- **No sensitive information (such as the company’s address) is emitted**.
+- A **Subgraph** is deployed to consistently listen to this event for indexing and querying.
+
+### 2. Purchasing Carbon Credits
+- When a company attempts to purchase carbon credits, a similar verification process is conducted using **ZK-SNARKs**.
+- The system ensures that **post-purchase**, the company’s total holdings **do not exceed** **1.5x** the carbon credit limit allocated at the beginning of the month.
+- This prevents **hoarding** and **monopolization** of credits in the market.
+- Since the **price per credit is constant**, the system prevents any speculative profiting opportunities.
+- Upon a successful purchase, an **event is emitted** containing:
+  - `listId`
+- This event is also **indexed by the Subgraph** for efficient querying.
+
+### 3. On-Chain Querying & UI Integration
+- The **Subgraph** enables efficient GraphQL-based on-chain queries to retrieve active listings (i.e., those not yet purchased).
+- The client-side **marketplace UI** fetches these active listings and displays them dynamically.
+- The **Apollo Client** is used to interact with The Graph, allowing:
+  - **Memory caching** for performance optimization.
+  - **Pagination** for seamless data handling.
+
+## Conclusion
+
+The **P2P Carbon Credit Trading system** ensures a **transparent, decentralized, and privacy-preserving** marketplace for carbon credits. By integrating **ZK-SNARKs**, **on-chain event emissions**, and **The Graph**, the platform guarantees **secure transactions**, **prevents monopolization**, and **enhances query efficiency** for a seamless user experience.
+
+---
