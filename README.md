@@ -4,9 +4,10 @@
 
 ## Complete Idea with a Business Model and Go-To Market Strategy
 #### Here's a [ppt](https://github.com/) about the entire project
+#### To read all the documentations and work flow refer to the ['docs'](https://github.com/Aardy-Bond/Kriti-25/tree/main/docs) directory
 
 ## 💻 TechStack Used
-#### <ul><li>JavaScript</li><li>Solidity</li><li>Circom</li><li>ReactJS</li><li>TailwindCSS</li><li>NodeJS</li><li>Web3.js</li><li>MongoDB</li><li>IPFS</li><li>PinataSDK</li><li>GraphQL</li><li>SocketIO</li><li>ZK Snarks</li></ul>
+#### <ul><li>JavaScript</li><li>Solidity</li><li>Circom</li><li>ReactJS</li><li>TailwindCSS</li><li>NodeJS</li><li>Web3.js</li><li>MongoDB</li><li>IPFS</li><li>PinataSDK</li><li>GraphQL</li><li>SocketIO</li><li>ZK Snarks</li><li>Redis</li></ul>
 
 
 ## 🚀 Features
@@ -22,6 +23,7 @@
 #### An ESP32 microcontroller setup connected to a computer for running the Arduino code
 #### An Account in the HiveMQ-A MQTT Broker Cloud
 #### Arduino IDE installed on the computer with which the ESP32 microcontroller will be connected using MicroUSB cable
+#### A free account on Redis Cloud
 #### <ul><li>[Node.js](https://nodejs.org/en/)</li><li>[MetaMask extension](https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm)</li><li>[MongoDB(local)](https://www.mongodb.com/docs/manual/installation/)</li><li>[MongoAtlas(Cloud)](https://www.youtube.com/watch?v=VkXvVOb99g0)</li><li>[IPFS](https://merrillinsurance.ipfs.com/)</li><li>[PinataSDK](https://pinata.cloud/)</li><li>[HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker/)</li><li>[Cloudinary](https://cloudinary.com/users/login)</li></ul>
 
 ### Setting up the frontend
@@ -62,6 +64,10 @@ MONGODB_URI= " URL of the cloud database setup on MongoAtlas "
 api_secret= " credentials of cloudinary "
 api_key= " credentials of cloudinary "
 cloud_name= " credentials of cloudinary "
+
+REDIS_HOST = "get from redis cloud" ,
+REDIS_PORT = "get from redis cloud" ,
+REDIS_PASSWORD = "get from redis cloud",
 ```
 ### Starting the project locally
 #### in app/client, below starts the client-side React+Vite application
@@ -70,7 +76,9 @@ npm run build
 npm run prod
 ```
 #### in app/server, below starts the server-side Node+Express application
-
+```
+npm run dev
+```
 
 ## 📂 Directory Structure
 ```
@@ -134,8 +142,8 @@ npm run prod
 ## ⭐ Feature Suggestion
 #### Feel free to [open an issue](https://github.com/) on GitHub if you have feature idea to be added 🙌.
 
-## 🧩 Team
-#### <ul><li>[Srinjoy](https://github.com/)</li><li>[Kevin](https://github.com/)</li><li>[Yash](https://github.com/)</li><li>[Shreyansh](https://github.com/)</li><li>[Dev](https://github.com/)</li><li>[Ayushmann](https://github.com/)</li></ul>
+<!-- ## 🧩 Team
+#### <ul><li>[Srinjoy](https://github.com/)</li><li>[Kevin](https://github.com/)</li><li>[Yash](https://github.com/)</li><li>[Shreyansh](https://github.com/)</li><li>[Dev](https://github.com/)</li><li>[Ayushmann](https://github.com/)</li></ul> -->
 
 
 Thanks for visiting my repository 😊!! Please give a star ⭐ if you liked our project.

@@ -149,6 +149,10 @@ The Peer-to-Peer (P2P) Carbon Credit Trading system enables companies to securel
   - **Memory caching** for performance optimization.
   - **Pagination** for seamless data handling.
 
+### 4. Off-Chain caching of recent Trades
+- Once a trade is successfully, the trade details(except any details of client) is published on redis using socketIO which is then visible to other clients for 24hours
+- Redis decouples the client, thus preventing the exposure of even the IP address of the clients to other clients.
+
 ## Conclusion
 
 The **P2P Carbon Credit Trading system** ensures a **transparent, decentralized, and privacy-preserving** marketplace for carbon credits. By integrating **ZK-SNARKs**, **on-chain event emissions**, and **The Graph**, the platform guarantees **secure transactions**, **prevents monopolization**, and **enhances query efficiency** for a seamless user experience.
