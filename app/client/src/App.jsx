@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./page/register/index.jsx";
 import { useContext } from "react";
@@ -9,7 +8,7 @@ import Dashboard from "./page/dashboard/index.jsx";
 import P2P from "./page/p2p/index.jsx";
 import KYC from "./page/kyc/index.jsx";
 import styles from "./styles/Home.module.css";
-
+import Landing from "./page/landing/index.jsx";
 import { useAccount } from "wagmi";
 
 function App() {
@@ -77,7 +76,8 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/p2p" element={<P2P />} />
-          <Route path="/" element={<KYC />} />
+          <Route path="/kyc" element={<KYC />} />
+          <Route path="/" element={<Landing />} />
         </Routes>
       </BrowserRouter>
     </>
