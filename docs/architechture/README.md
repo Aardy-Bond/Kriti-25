@@ -2,6 +2,10 @@
 
 <img src="../public/a2.png"/>
 
+# Company Documents Verification  
+
+Users register through the **admin dashboard** and upload the required documents. These documents are **automatically submitted** to the government for verification. Upon successful verification, users receive a **notification** confirming their registration approval, granting them access to the platform with **verified credentials**. The system ensures a **secure and automated** approval workflow.  
+
 # Decentralized Company Registration and Verification Protocol
 
 This report outlines the development and workflow of a decentralized company registration platform that utilizes CryptoJS for encryption, IPFS for decentralized storage, and NFTs for identity verification. The platform ensures secure storage and retrieval of company data while leveraging blockchain technology for transparency and authentication. 
