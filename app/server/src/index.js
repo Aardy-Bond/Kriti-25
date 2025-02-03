@@ -35,10 +35,6 @@ app.use(express.static('public'));
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
-// Ping endpoint
-app.get("/ping", (req, res) => {
-  res.send("PONG");
-});
 
 // Global error handler
 app.use((err, req, res, next) => {

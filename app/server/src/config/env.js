@@ -5,9 +5,6 @@ const keys = {
   PORT: process.env.PORT,
   URL: process.env.URL,
 
-  PRIVATE_KEY_METAMASK: process.env.PRIVATE_KEY_METAMASK,
-  RPC_URL: process.env.RPC_URL,
-
   PINATA_API_KEY: process.env.PINATA_API_KEY,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY,
   GATEWAY_URL: process.env.GATEWAY_URL,
@@ -29,6 +26,9 @@ const keys = {
   REDIS_HOST : process.env.REDIS_HOST,
   REDIS_PORT : process.env.REDIS_PORT,
   REDIS_PASSWORD : process.env.REDIS_PASSWORD,
+  
+  RPC_URL : process.env.RPC_URL,
+  PRIVATE_KEY : process.env.PRIVATE_KEY,
 };
 
 

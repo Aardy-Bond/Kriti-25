@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context.jsx";
 import { BuyCredits, SellCredits } from "../../apis/p2p.contracts";
-// import { SubmitSellProof , SubmitBuyProof } from "../../apis/verifierZK.js";
 import { generateSellProof, generateBuyProof } from "../../configs/snark.js";
-import { GetCredits } from "../../apis/iot.contracts.js";
 import axios from "axios";
 import { updateURI } from "../../apis/auth.contracts.js";
 import CryptoJS from "crypto-js";

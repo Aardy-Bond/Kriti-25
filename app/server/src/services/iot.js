@@ -27,8 +27,7 @@ mqttClient.on('message', (topic, message)=>{
         if(data.carbonCredits !== undefined || data.identifier !== undefined) throw new Error('Insufficient Data');
         console.log('Updated latest data:', data);
         iotsData[topic] = JSON.stringify(data);
-        BroadcastData(data);
-        // PublishData(data);  
+        BroadcastData(data); 
       } catch (error){
         console.error(`Failed to process incoming data:${error}`);
       }

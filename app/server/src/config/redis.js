@@ -1,9 +1,11 @@
-import redis from 'redis'
+import { createClient } from 'redis';
 import keys from './env.js';
+
+let redisClient;
 
 (async () => {
     try {
-      redisClient = redis.createClient({
+      redisClient = createClient({
         username: 'default',
         password: keys.REDIS_PASSWORD,
         socket: {
@@ -15,6 +17,7 @@ import keys from './env.js';
       console.log('Redis running on a cloud')
       await redisClient.connect();
     } catch (error) {
+      console.log(error)
       console.log('Some Error Occured in Redis')
     }
   })();

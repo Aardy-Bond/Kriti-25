@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import {ethers} from 'ethers';
 import keys from './env.js';
 
 const provider = new ethers.JsonRpcProvider(keys.RPC_URL);
@@ -17,12 +17,30 @@ const contractABI = [
 		"name": "getByIdentifier",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "uint256[]",
 				"name": "",
-				"type": "uint256"
+				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_identifier",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_initialCredit",
+				"type": "uint256"
+			}
+		],
+		"name": "initializeIdentifier",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -44,6 +62,6 @@ const contractABI = [
 		"type": "function"
 	}
 ];
-const contractAddress = "0xe0b5709dd00984cb0438183c81ea612b948b6c62";
+const contractAddress = "0xd69Bb0898e8f9292B8ccD137aaEFD7079ad43eAd";
 
 export const contract = new ethers.Contract(contractAddress, contractABI, wallet);
