@@ -5,22 +5,21 @@ import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import logo from "../../assets/logo.png";
 import { Context } from "../../context/context.jsx";
+import Dialog from "../../components/dailog.jsx";
+import Loader from "../../components/loader.jsx";
 
 const Register = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    businessName: "",
-    country: "",
-    sector: "",
-    yearOfEstablishment: "",
-    iots: "",
-  });
+  const [dialogProps, setDialogProps] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [loading , setLoading] = useState(false);
 
   const [key, setKey] = useState("");
 
   const context = useContext(Context);
-  const {accData} = context;
+  const {accData,isConnected} = context;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,17 +46,19 @@ const Register = () => {
         !key.trim()
       ) return;
       const iotArray = formData.iots.split(',').map((iot)=>iot.trim());
-      setFormData((prevFormData)=>(
-        {
-          ...prevFormData ,
-          carbonCredits:100,
-          creditsLimit:100,
-          activity:0,
-          iots:iotArray,
-          user: accData.user
-        }
-       ))
-      const data = handleHashing(formData);
+      let temp= {
+        ...formData ,
+        carbonCredits:100,
+        creditsLimit:100,
+        activity:0,
+        iots:iotArray,
+        user: accData.user
+      };
+      setFormData(temp);
+      console.log(temp);
+      const data = handleHashing(temp);
+      console.log(data);
+      setLoading(true);
       const res = await axios.post(
         "http://localhost:3000/api/v1/company/register",
         { data: data },
@@ -70,19 +71,51 @@ const Register = () => {
       if (res.status === 500) throw new Error("Not Uploaded to IPFS");
       const transaction = await RegisterBusiness({
         data: res.data.data,
-        formData: formData,
+        formData: temp,
       });
       if (!transaction) {
-        alert("Not Registered");
+        setLoading(false)
+        setOpenDialog(true);
+        setDialogProps({
+        msg:'Failed to Register!',
+        closefn:setOpenDialog,
+        callback:null
+      })
         return;
       }
+      setLoading(false);
+      setOpenDialog(true);
+      setDialogProps({
+        msg:'Success in Registration!\nProceed to Login',
+        closefn:setOpenDialog,
+        callback:null
+      })
     } catch (error) {
-      console.log(`Some Error occured\n${error.message}`);
+      setLoading(false)
+        setOpenDialog(true);
+        setDialogProps({
+        msg:'Failed to Register!',
+        closefn:setOpenDialog,
+        callback:null
+      })
     }
   }
 
   return (
     <>
+    {
+      loading &&
+      <div className="w-[100vw] h-[100vh] glassmorphism fixed flex justify-center items-center">
+        <Loader />
+      </div>
+    }
+    {openDialog && (
+        <Dialog
+          msg={dialogProps.msg}
+          closefn={dialogProps.closefn}
+          callback={dialogProps.callback}
+        />
+      )}
       <div className="flex w-[100vw]">
         <div className="col1">
           <img src={logo} alt="" />
@@ -93,6 +126,15 @@ const Register = () => {
 
           <form className="create" onSubmit={(e)=>{
             e.preventDefault();
+            if(!isConnected) {
+              setOpenDialog(true);
+              setDialogProps({
+                msg: `Connect to your Wallet!`,
+                closefn: setOpenDialog,
+                callback: null,
+              });
+              return
+            }
             handleSubmit();
           }}>
             <label>Enter your Company Name</label>
@@ -108,7 +150,7 @@ const Register = () => {
             <input type="text" name="iots" onChange={handleChange} required />
 
             <label>Enter your Amount of Power Consumed per year(in KWh)</label>
-            <input type="text" name="unitProd" onChange={handleChange} required />
+            <input type="text" name="unitsProd" onChange={handleChange} required />
 
             <label>Enter your year established</label>
             <input

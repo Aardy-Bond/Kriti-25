@@ -1,5 +1,5 @@
 import mqttClient from "../config/iot.js";
-import { BroadcastData } from "./socket.js";
+import {BroadcastData} from '../index.js'
 import Iot from "../models/iot.models.js";
 import { contract } from "../config/evm.js";
 import cron from 'node-cron'

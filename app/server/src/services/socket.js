@@ -5,8 +5,8 @@ let socketMap = {};
 
 io.on('connection' , (socket)=>{
     console.log(`${socket.id} connected`);
-    socket.on('subscribe' , async (identifiers)=>{
-        identifiers.forEach(identifier => { //loop to handle all the identifiers
+    socket.on('subscribe' , async (iots)=>{
+        iots.forEach(identifier => { //loop to handle all the identifiers
             socketMap[identifier] = socket.id
         });
         let activities = await RedisGet({key:'activities'});

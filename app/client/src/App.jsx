@@ -26,8 +26,6 @@ function App() {
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    console.log(isConnected)
-    console.log(address);
     if (isConnected && address) {
       setAccData({user:address});
       setIsConnected(isConnected);
