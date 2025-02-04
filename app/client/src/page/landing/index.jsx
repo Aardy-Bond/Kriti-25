@@ -48,13 +48,34 @@ const Landing = () => {
       {/* Footer with 3 Boxes */}
       <div className="absolute bottom-5 w-[90%] left-1/2 -translate-x-1/2 flex justify-between space-x-4">
         <div className="w-1/3 bg-black/80 rounded-2xl p-6 text-white text-center">
-          <p>What we do?</p>
+          <p className="text-2xl">
+            Privacy?
+            <br />
+            That's Us. <br />
+          </p>
+          <p className="mt-3">
+            {" "}
+            Blockchain powers a decentralized, tamper-proof ledger, while
+            state-of-the-art encryption keeps your data private—only you have
+            the key to view it.
+          </p>
         </div>
         <div className="w-1/3 bg-black/80 rounded-2xl p-6 text-white text-center">
-          <p>Contact us</p>
+          <p className="text-2xl">Realtime IOT Data, So You're Never Behind.</p>
+          <p className="mt-3">
+            Monitor your consumption data and analytics in real time through a
+            grid of independently functioning IOTs. Compare yourself to your
+            industry and stay on top of the game.{" "}
+          </p>
         </div>
         <div className="w-1/3 bg-black/80 rounded-2xl p-6 text-white text-center">
-          <p>Our Mission</p>
+          <p className="text-2xl">
+            Seamless P2P Trading, Eliminate The Middleman.
+          </p>
+          <p className="mt-3">
+            Open and a free marketplace for the transaction of carbon credits,
+            completely anonymous and secure and the same time.{" "}
+          </p>
         </div>
       </div>
     </div>
