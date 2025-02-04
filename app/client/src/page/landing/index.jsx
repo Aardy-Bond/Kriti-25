@@ -1,9 +1,17 @@
 import React from "react";
 import logo from "../../assets/logo.png";
 import img from "../../assets/img.png";
+import { useNavigate } from "react-router-dom";
 const Landing = () => {
+  const navigate = useNavigate();
+  const goToLogin = () => {
+    navigate("/sign-in"); // Navigates to /home
+  };
+  const goToSignup = () => {
+    navigate("/register"); // Goes back to the previous page
+  };
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-screen w-full flex justify-center items-center">
       <style>
         {`
         .cover {
@@ -34,11 +42,10 @@ const Landing = () => {
       <div className="absolute top-5 left-5 text-white text-xl font-semibold flex items-center space-x-2">
         <img src={logo} alt="carbonX" className="" />
       </div>
-      <div className="absolute top-5 right-5 flex space-x-6 text-white">
-        <button className="login-button">Login</button>
-        <button className="login-button">Sign up</button>
+      <div className="absolute top-5 right-5 flex text-white mt-4 justify-center text-center items-center gap-3">
+        <button className="login-button" onClick={goToLogin}>Login</button>
+        <button className="login-button" onClick={goToSignup}>Sign up</button>
       </div>
-
       {/* Centered Text - Ensured it's Above the Image */}
       <div className="relative flex flex-col items-center justify-center h-full text-white text-center z-10">
         <h1 className="text-5xl font-bold">Welcome</h1>
