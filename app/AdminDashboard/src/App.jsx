@@ -8,7 +8,11 @@ function App() {
     const fetchCompanyData = async () => {
       try {
         const response = await axios.get(
+<<<<<<< HEAD
           "http://localhost:3000/api/v1/dashboard/getCompanyData"
+=======
+          "http://localhost:3000/api/dashboard/getCompanyData"
+>>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
         );
         console.log("Fetched data:", response.data); // Debugging log
 

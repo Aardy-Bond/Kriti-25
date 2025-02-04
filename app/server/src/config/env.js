@@ -14,6 +14,7 @@ const keys = {
   MQTT_BROKER_PORT: process.env.MQTT_BROKER_PORT,
   MQTT_BROKER_USERNAME: process.env.MQTT_BROKER_USERNAME,
   MQTT_BROKER_PASSWORD: process.env.MQTT_BROKER_PASSWORD,
+<<<<<<< HEAD
 
   EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
@@ -31,5 +32,16 @@ const keys = {
   PRIVATE_KEY : process.env.PRIVATE_KEY,
 };
 
+=======
+
+  EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+  MONGODB_URI: process.env.MONGODB_URI,
+
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+};
+>>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
 
 export default keys;

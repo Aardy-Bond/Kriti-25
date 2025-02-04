@@ -4,6 +4,10 @@ import http from "http";
 import { Server as SocketIo } from "socket.io";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
+<<<<<<< HEAD
+=======
+import iotRoutes from "./routes/iot.routes.js";
+>>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
 import companyRoutes from "./routes/company.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import { RedisGet, RedisSet } from './config/redis.js';
@@ -68,12 +72,24 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+<<<<<<< HEAD
 app.use(express.static('public'));
 
 // Routes
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
+=======
 
+// Routes
+app.use("/api/iot", iotRoutes);
+app.use("/api/companies", companyRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+
+// Ping endpoint
+app.get("/ping", (req, res) => {
+  res.send("PONG");
+});
+>>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -81,6 +97,15 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong!");
 });
 
+<<<<<<< HEAD
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
+
+=======
+>>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
 // Connect to DB and start the server
 const startServer = async () => {
   try {
