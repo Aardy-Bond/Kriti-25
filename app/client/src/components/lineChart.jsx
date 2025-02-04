@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Doughnut, Line } from "react-chartjs-2";
+import React, { useContext, useState } from "react";
+import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     LineElement,
@@ -9,11 +9,34 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import { Context } from "../context/context";
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
 const LineChart = () => {
 
     const [chartType, setChartType] = useState("days");
+    const context = useContext(Context);
+    const {iotData} = context;
+    let length = Object.values(iotData)[0]?.length || 0;
+    let labelsArray = Array.from({ length }, (_, i) => i + 1);
+    const dataSets = Array.from({ length }, (_, i) => 
+        Object.values(iotData).reduce((sum, arr) => sum + arr[i], 0)
+    );
+
+    const chartData = {
+        labels : labelsArray,
+        datasets : [
+            {
+                label:"Daily Consumption",
+                data:dataSets,
+                borderColor: "#FACC15",
+                backgroundColor: "rgba(250, 204, 21, 0.2)",
+                pointBackgroundColor: "#FACC15",
+            }
+        ]
+    }
+    
+
     const chartDataDays = {
         labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], // Days of the week
         datasets: [
@@ -56,6 +79,10 @@ const LineChart = () => {
     };
 
 
+    const dayWiseData = {
+       
+    }
+
     return (
         <div className="flex flex-col bg-[#191919] h-[55vh] text-white p-4 rounded-lg shadow-lg">
             <div className="flex justify-between items-center h-2/12">
@@ -66,7 +93,7 @@ const LineChart = () => {
                     {
                         (() => {
                             try {
-                                return <Line data={chartType === 'days' ? chartDataDays : chartType === 'months' ? chartDataMonth : chartDataYear} 
+                                return <Line data={chartData}
                                 options={{ maintainAspectRatio: false }} width={2000}/>;
                             } catch (error) {
                                 console.error("Chart rendering error:", error);
@@ -76,11 +103,11 @@ const LineChart = () => {
                     }
                 </div>
 
-                <div className="flex flex-col  gap-2 justify-center w-2/12">
+                {/* <div className="flex flex-col  gap-2 justify-center w-2/12">
                     <button className={` hover:text-white text-sm ${chartType==='months'? 'text-white':'text-gray-400'}`} onClick={() => setChartType('months')}>months</button>
                     <button className={` hover:text-white text-sm ${chartType==='days'? 'text-white':'text-gray-400'}`} onClick={() => setChartType('days')}>days</button>
                     <button className={` hover:text-white text-sm ${chartType==='years'? 'text-white':'text-gray-400'}`} onClick={() => setChartType('years')}>year</button>
-                </div>
+                </div> */}
             </div>
         </div>
     )

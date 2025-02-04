@@ -13,6 +13,9 @@ import Navbar from "../../components/navbar.jsx";
 import { SocketContext } from "../../context/socket.jsx";
 import Dialog from "../../components/dailog.jsx";
 import Loader from "../../components/loader.jsx";
+import { useNavigate } from "react-router";
+import io from 'socket.io-client';
+import { backendUrl } from "../../configs/constants.js";
 
 const P2P = () => {
   const users = [
@@ -48,7 +51,15 @@ const P2P = () => {
   const context = useContext(Context);
   const { accData, setAccData, isConnected } = context;
   const socketContext = useContext(SocketContext);
-  const { socketId } = socketContext;
+  const { socketId , setSocketId} = socketContext;
+
+  const navigate = useNavigate();
+  
+  // useEffect(()=>{
+  //   if(!accData.key || !accData.businessName) {
+  //     navigate('/sign-in')
+  //   }
+  // },[])
 
   const {
     loading: loadingList,
@@ -66,10 +77,6 @@ const P2P = () => {
   } = useQuery(GET_PURCHASE, {
     variables: { first: 1, skip: 0 },
   });
-
-  useEffect(() => {
-    console.log(isConnected);
-  }, [isConnected]);
 
   useEffect(() => {
     if (loadingList || loadingPurchase) setLoading(true);
@@ -94,6 +101,27 @@ const P2P = () => {
     }
   }, [dataList, dataPurchase]);
 
+
+  useEffect(() => {
+    const newSocket = io(backendUrl);
+    setSocketId(newSocket);
+  
+    newSocket.on("connect", () => {
+      setSocketId(newSocket);
+      console.log("Connected to socket:", newSocket.id);
+    });
+
+    newSocket.on("disconnect", () => {
+      console.log("Disconnected from socket");
+      setSocketId(null);
+    });
+  
+    return () => {
+      newSocket.disconnect();
+      console.log("Socket disconnected on cleanup");
+    };
+  },[])
+
   const handleHashing = (data) => {
     const encrypted = CryptoJS.AES.encrypt(
       JSON.stringify(data),
@@ -105,10 +133,11 @@ const P2P = () => {
   async function handleIPFSUpdate(change) {
     let data = {
       ...accData,
-      carbonCredits: accData.carbonCredits + change,
-      activity: activity + change,
+      carbonCredits: Number(accData.carbonCredits) - Number(change),
+      activity: Number(accData.activity) + Number(change),
     };
     setAccData(data);
+    console.log(data)
     delete data.key;
     const hashed = handleHashing(data);
     const res = await axios.post(
@@ -149,21 +178,16 @@ const P2P = () => {
   }
 
   async function handleBuy(index) {
-    // const carbonCredits = GetCredits({
-    //   iots: accData.iot,
-    //   address: accData.user,
-    // });
-    // const carbonCredits = ;
-    // if (!carbonCredits) return;
-    // setAccData({ ...accData, carbonCredits: carbonCredits });
+    if(!accData.key) {
+      navigate('/sign-in');
+      return
+    }
     let res = await generateBuyProof({
       balance: accData.carbonCredits || 100,
       units: listings[index].units,
       limit: accData.creditsLimit || 150,
     });
     if (!res) return;
-    // res = await submitProof({proof:proof,publicInputs:[Number(res.publicSignals[0])],action:'buy'});
-    // if(!res) return;
     res = await BuyCredits({
       listId: listings[index].listId,
       address: accData.user,
@@ -180,18 +204,12 @@ const P2P = () => {
   }
 
   async function handleSell() {
-    // let carbonCredits = GetCredits({iots:accData.iot , address:accData.user});
-    // let carbonCredits = 100;
-    // if (!carbonCredits) return;
-    // setAccData({ ...accData, carbonCredits: carbonCredits });
     formData.totalPrice = formData.price * formData.units;
     let res = await generateSellProof({
       balance: accData.carbonCredits || 100,
       units: formData.units,
     });
     if (!res) return;
-    // res = await submitProof({proof:proof , publicInputs:[Number(res.publicSignals[0])],action:'sell'});
-    // if(!res) return;
     res = await SellCredits({ data: formData, address: accData.user });
     if (!res) return;
     await handleIPFSUpdate(formData.units);
@@ -212,18 +230,13 @@ const P2P = () => {
           callback={dialogProps.callback}
         />
       )}
-      <div
+      {
+        // accData.key &&
+        <div
         className="h-screen w-screen p-10 mt-[50px]"
         // style={{ "background-image": `url(${bgimg})` }}
       >
         <div className=" flex flex-col bg-[#1e1e1e] bg-opacity-90 rounded-lg">
-          {/* <div className="grid grid-cols-5 mt-10 mb-10 h-20 ">
-          <div></div>
-          <div className=" rounded-lg bg-gradient-to-r from-[#494747]  to-[#272727] h-26"></div>
-          <div></div>
-          <div className=" rounded-lg bg-gradient-to-r from-[#494747]  to-[#272727] h-26"></div>
-          <div></div>
-        </div> */}
           <div className="flex justify-between min-h-[40vw] p-10">
             <div className="justify-center w-[22vw] flex flex-col">
               <form
@@ -235,18 +248,11 @@ const P2P = () => {
                 <br />
                 <label className="text-left">eth:</label>
                 <div className="relative w-full pl-1 pr-1">
-                  {/* <div className="flex justify-between text-xs text-white">
-                    <span>0</span>
-                    <span>100</span>
-                  </div> */}
                 </div>
                 <input
                   className="w-full m-2 border-[3px] border-[solid] border-whiteborder border-gray-300 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-700"
                   type="text"
                   name="price"
-                  // defaultValue="10"
-                  // min="0"
-                  // max="100"
                   onChange={handleChange}
                 />
 
@@ -262,9 +268,6 @@ const P2P = () => {
                   className="w-full m-2 border-[3px] border-[solid] border-whiteborder border-gray-300 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-700"
                   type="text"
                   name="units"
-                  // defaultValue="10"
-                  // min="0"
-                  // max="100"
                   onChange={handleChange}
                 />
                 {/* {formData.price} */}
@@ -273,6 +276,10 @@ const P2P = () => {
                 <button
                   type="submit"
                   onClick={() => {
+                    if(!accData.key) {
+                      navigate('/sign-in')
+                      return
+                    }
                     setOpenDialog(true);
                     setDialogProps({
                       msg: `Sure to sell ${formData.units} credits for ${formData.price} eth each?`,
@@ -294,12 +301,13 @@ const P2P = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-4 col-span-3">
-                  {users.map(([uname, eth, percent], index) => (
+                  {listings.map(({listId, units, price}, index) => (
                     <Cards
                       key={index}
-                      uname={uname}
-                      eth={eth}
-                      percent={percent}
+                      uname={index}
+                      eth={units}
+                      percent={price}
+                      handleBuy={handleBuy}
                     />
                   ))}
                 </div>
@@ -308,6 +316,7 @@ const P2P = () => {
           </div>
         </div>
       </div>
+      }
     </>
   );
 };

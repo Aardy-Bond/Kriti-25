@@ -1,5 +1,5 @@
 
-export const nftContractAddress = "0x46AFD994F8deEFBa32E91CdfA0bcC298e285b216";
+export const nftContractAddress = "0x0322a76E9231DEe5B52F9cbF1BD1a6d027a5b951";
 export const NFT_ABI = [
 	{
 		"inputs": [],
@@ -223,7 +223,7 @@ export const NFT_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "Listed",
+		"name": "ListedCredits",
 		"type": "event"
 	},
 	{
@@ -249,39 +249,14 @@ export const NFT_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "Purchased",
+		"name": "PurchasedCredits",
 		"type": "event"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "businessName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "sector",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "country",
-				"type": "string"
-			},
-			{
 				"internalType": "string",
 				"name": "tokenUri",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "yearOfEstablishment",
 				"type": "string"
 			}
 		],

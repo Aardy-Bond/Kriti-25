@@ -20,7 +20,7 @@ const Navbar = ()=>{
                     {/* <p className="text-sm cursor-pointer">Liquid Pool Identity</p> */}
                   </div>
                   <div className="w-3/12 text-right">
-                    <p className="text-md font-medium">{accData.businessName}</p>
+                    {/* <p className="text-md font-medium">{accData.businessName}</p> */}
                   </div>
             </div>
     )

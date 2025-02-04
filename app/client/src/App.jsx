@@ -27,8 +27,6 @@ function App() {
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    console.log(isConnected)
-    console.log(address);
     if (isConnected && address) {
       setAccData({user:address});
       setIsConnected(isConnected);
@@ -77,7 +75,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/p2p" element={<P2P />} />
-          <Route path="/" element={<KYC />} />
+          <Route path="/kyc" element={<KYC />} />
         </Routes>
       </BrowserRouter>
     </>
