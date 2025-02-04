@@ -2,3 +2,4 @@ workflow.txt
 /packages
 ca
 /arduino
+node_modules
