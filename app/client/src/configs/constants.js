@@ -834,5 +834,5 @@ export const IOT_ABI = [
 		"type": "function"
 	}
 ];
-export const subgraphUrl= "https://api.studio.thegraph.com/query/102654/listing/v0.1"
+export const subgraphUrl= "https://api.studio.thegraph.com/query/102266/listing_final/v0.1"
 export const backendUrl="http://localhost:3000"
