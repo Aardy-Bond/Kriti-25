@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "carbonchain": {
+      "address": "0x0322a76E9231DEe5B52F9cbF1BD1a6d027a5b951",
+      "startBlock": 7634353
+    }
+  }
+}

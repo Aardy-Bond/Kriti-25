@@ -8,7 +8,7 @@ type ApprovalForAll @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Listed @entity(immutable: true) {
+type ListedCredits @entity(immutable: true) {
   id: Bytes!
   listId: BigInt! # uint256
   units: BigInt! # uint256
@@ -19,7 +19,7 @@ type Listed @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Purchased @entity(immutable: true) {
+type PurchasedCredits @entity(immutable: true) {
   id: Bytes!
   listId: BigInt! # uint256
   blockNumber: BigInt!

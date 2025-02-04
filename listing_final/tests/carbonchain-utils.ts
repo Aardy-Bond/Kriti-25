@@ -2,15 +2,15 @@ import { newMockEvent } from "matchstick-as"
 import { ethereum, Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   ApprovalForAll,
-  Listed,
-  Purchased,
+  ListedCredits,
+  PurchasedCredits,
   RoleAdminChanged,
   RoleGranted,
   RoleRevoked,
   TransferBatch,
   TransferSingle,
   URI
-} from "../generated/main/main"
+} from "../generated/carbonchain/carbonchain"
 
 export function createApprovalForAllEvent(
   account: Address,
@@ -34,45 +34,45 @@ export function createApprovalForAllEvent(
   return approvalForAllEvent
 }
 
-export function createListedEvent(
+export function createListedCreditsEvent(
   listId: BigInt,
   units: BigInt,
   price: BigInt,
   totalPrice: BigInt
-): Listed {
-  let listedEvent = changetype<Listed>(newMockEvent())
+): ListedCredits {
+  let listedCreditsEvent = changetype<ListedCredits>(newMockEvent())
 
-  listedEvent.parameters = new Array()
+  listedCreditsEvent.parameters = new Array()
 
-  listedEvent.parameters.push(
+  listedCreditsEvent.parameters.push(
     new ethereum.EventParam("listId", ethereum.Value.fromUnsignedBigInt(listId))
   )
-  listedEvent.parameters.push(
+  listedCreditsEvent.parameters.push(
     new ethereum.EventParam("units", ethereum.Value.fromUnsignedBigInt(units))
   )
-  listedEvent.parameters.push(
+  listedCreditsEvent.parameters.push(
     new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(price))
   )
-  listedEvent.parameters.push(
+  listedCreditsEvent.parameters.push(
     new ethereum.EventParam(
       "totalPrice",
       ethereum.Value.fromUnsignedBigInt(totalPrice)
     )
   )
 
-  return listedEvent
+  return listedCreditsEvent
 }
 
-export function createPurchasedEvent(listId: BigInt): Purchased {
-  let purchasedEvent = changetype<Purchased>(newMockEvent())
+export function createPurchasedCreditsEvent(listId: BigInt): PurchasedCredits {
+  let purchasedCreditsEvent = changetype<PurchasedCredits>(newMockEvent())
 
-  purchasedEvent.parameters = new Array()
+  purchasedCreditsEvent.parameters = new Array()
 
-  purchasedEvent.parameters.push(
+  purchasedCreditsEvent.parameters.push(
     new ethereum.EventParam("listId", ethereum.Value.fromUnsignedBigInt(listId))
   )
 
-  return purchasedEvent
+  return purchasedCreditsEvent
 }
 
 export function createRoleAdminChangedEvent(
