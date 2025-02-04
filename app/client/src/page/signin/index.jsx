@@ -68,11 +68,14 @@ const SignIn = () => {
         </div>
 
         <div className="col2">
-          <h1 className="login">Login to your Account</h1>
+          <h1 style={{fontSize:'2rem',margin:'20px 0px'}} className="login">Login to your Account</h1>
 
-          <form className="create">
+          <form className="create" onSubmit={(e)=>{
+            e.preventDefault();
+            handleSubmit();
+          }}>
             <label>Enter your Token Id</label>
-            <input
+            <input style={{margin:'10px 0px'}}
               type="text"
               name="tokenId"
               onChange={handleChange}
@@ -80,9 +83,9 @@ const SignIn = () => {
             />
             <label>Enter your Wallet Address</label>
 
-            <input type="text" name="user" onChange={handleChange} required />
+            <input style={{margin:'10px 0px'}} type="text" name="user" onChange={handleChange} required />
             <label>Enter your Password</label>
-            <input
+            <input style={{margin:'10px 0px'}}
               type="text"
               name="private_key"
               onChange={(e) => {
@@ -91,9 +94,9 @@ const SignIn = () => {
               required
             />
 
-            <button className="submit">Proceed</button>
+            <button className="submit" type="submit">Proceed</button>
           </form>
-          <p className="register" onClick={handleSubmit}>
+          <p className="register" type="submit">
             Not A User?{" "}
             <a
               onClick={() => {

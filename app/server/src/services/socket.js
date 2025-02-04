@@ -3,15 +3,14 @@ import {io} from '../index.js'
 let socketMap = [];
 
 io.on('connection' , (socket)=>{
-    console.log(`connected with the ${socket.id}`);
-    //socket events, likely not many
-    // socket.on('event-name' , ()=>{
-    // });
-    
+    console.log(`${socket.id} connected`);
+    socket.on('subscribe' , (identifiers)=>{
+        identifiers.forEach(identifier => {
+            socketMap[identifier] = socket.id
+        });
+    })
 })
 
-export async function BroadcastData({strollerId , data}) {
-    //emit the data to the clients side UI. Needs more checks and handling here.
-    io.to(socketMap[strollerId]).emit('data' , data);
-    //hanldes any kind of email notifications and in app notification
+export async function BroadcastData(data) {
+    io.to(socketMap[data.identifier]).emit('data' , data.carbonCredits);
 }

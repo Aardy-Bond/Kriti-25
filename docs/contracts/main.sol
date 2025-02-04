@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
@@ -10,16 +10,6 @@ contract UserBoundNFT is ERC1155, AccessControl {
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     Counters.Counter private _tokenIdCounter; 
-    // try converting this tokenId to some seed phrase-cancelled
-
-   // struct BusinessInfo {
-     //   string businessName;
-     //   string sector;
-     //   uint256 carbonCredits;
-     //   string country;
-     //   string yearOfEstablishment;
-   // }
-    //this will be removed
 
     struct ListedCredit {
        uint256 price;
@@ -27,21 +17,19 @@ contract UserBoundNFT is ERC1155, AccessControl {
        uint256 units;
        address seller;
     }
-
-    // mapping(string => BusinessInfo) private _businessData; // Token uri to Business Info, will be removed
-    // mapping(uint256 => address) private _owners; 
+ 
     mapping(uint256 => string) private _uris; 
-
-
     mapping(uint256=>ListedCredit) private _listings;
-    uint256 listId=0;
+    uint256  private listId=0;
+    address private admin;
 
     // use graphQL for fetching and indexing
-    event ListedCredits(uint256 listId , uint256 units , uint256 price , uint256 totalPrice); 
-    event PurchasedCredits(uint256 listId );
+    event ListedCredits(uint256 indexed  listId , uint256 indexed  units , uint256 indexed  price , uint256 totalPrice); 
+    event PurchasedCredits(uint256 indexed  listId );
 
 
-    constructor() ERC1155("") {
+    constructor() ERC1155("https://ipfs.io/ipfs/bafkreiar442uwfrvmtj453xxb6gdedae7xm4tpcanynulwhb2la7bxnerm") {
+        admin = msg.sender;
         _grantRole(ADMIN_ROLE, msg.sender); // Assign deployer as admin
     }
 
@@ -54,6 +42,12 @@ contract UserBoundNFT is ERC1155, AccessControl {
     function uri(uint256 tokenId) public view override returns (string memory) {
         require(bytes(_uris[tokenId]).length > 0, "URI not set for this token");
         return _uris[tokenId];
+    }
+
+    function _update(address from, address to, uint256[] memory ids, uint256[] memory values) 
+    internal override {
+        require(from==address(0) || to==address(0) , "Soul-Bound NFT");
+        super._update(from, to, ids, values);
     }
 
     function registerBusiness( address user, string memory businessName, string memory sector, string memory country,
@@ -76,33 +70,20 @@ contract UserBoundNFT is ERC1155, AccessControl {
             yearOfEstablishment
         );
         _mint(user, tokenId, 1, metadata);
-        // _owners[tokenId] = user;
         _uris[tokenId] = tokenUri;
 
 
-        //_businessData[tokenUri] = BusinessInfo({
-          //  businessName: businessName,
-            //sector: sector,
-           // carbonCredits: carbonCredits,
-           // country:country,
-            //yearOfEstablishment:yearOfEstablishment
-        //});
-        //this will be removed
         return tokenId; 
-        //give this to business and say them not to share with anyone. unhone share kiya toh unki maa ka bhosda
     }
 
     function verifyBusiness( uint256 tokenId) external view returns (string memory) {
-        require(msg.sender != address(0), "Invalid wallet address");
-        // require(_owners[tokenId]==msg.sender , "Not authorized"); 
+        require(msg.sender != address(0), "Invalid wallet address"); 
         require(balanceOf(msg.sender, tokenId) > 0 , "No NFT found");
         string memory tokenUri = uri(tokenId);
         return (tokenUri);
-        //use this uri to get the meatdata from the ipfs
     }
 
-    function updateUri(uint256 tokenId, string memory newUri) external  onlyRole(ADMIN_ROLE) {
-        // require(_owners[tokenId] != address(0), "Token does not exist"); 
+    function updateUri(uint256 tokenId, string memory newUri) external  onlyRole(ADMIN_ROLE) { 
         require(balanceOf(msg.sender, tokenId) > 0 , "No NFT found");
         _uris[tokenId] = newUri;
     }
@@ -125,10 +106,17 @@ contract UserBoundNFT is ERC1155, AccessControl {
         require(_listings[_listId].units!=0 , "Already Sold");
         ListedCredit memory listing = _listings[_listId];
         require(msg.value >= listing.totalPrice , "Insufficient Ethers");
+
+        uint256 adminFee = (listing.totalPrice * 1) / 10000;
+        uint256 sellerAmount = listing.totalPrice - adminFee;
+
+        (bool sentToAdmin, ) = admin.call{value: adminFee}("");
+        require(sentToAdmin, "Failed to send admin fee");
+
         address seller = listing.seller;
         address buyer  = msg.sender; 
         uint256 excess = msg.value - listing.totalPrice;
-        (bool sentToSeller,) = seller.call{value:listing.totalPrice}("");
+        (bool sentToSeller,) = seller.call{value:sellerAmount}("");
         require(sentToSeller, "Failed to send Ether to seller");
 
         if (excess > 0) {
