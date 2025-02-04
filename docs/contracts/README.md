@@ -104,3 +104,100 @@ This contract manages the credit values associated with IoT devices. It stores c
         - The identifier must not already exist in the mapping.
 - **Error Messages**:
     - `"Identifier already exists"`: Thrown if the identifier is already present in the mapping.
+
+# Orderbook Smart Contract
+
+This contract implements a order book mechanism for buying and selling assets at a **fixed price**.
+This contract is currently not implemented as it is very gas intensive, but moving to layer 2 network such arbitrum network could mitigate this issue. 
+
+## Variables
+
+### `flatRate`
+- **Type**: `uint256`
+- **Description**: This public variable represents the fixed price per unit of the traded asset.
+
+### `buyOrders`
+- **Type**: `Order[]`
+- **Description**: An array that stores all **buy orders**, containing the user address and quantity.
+
+### `sellOrders`
+- **Type**: `Order[]`
+- **Description**: An array that stores all **sell orders**, containing the user address and quantity.
+
+## Structs
+
+### `Order`
+- **Fields**:
+  - `user (address)`: The Ethereum address of the buyer or seller.
+  - `quantity (uint256)`: The quantity of the asset requested in the order.
+- **Description**: This struct represents a single order in the system.
+
+## Events
+
+### `BuyOrderPlaced`
+- **Parameters**:
+  - `buyer (address)`: The address of the user who placed the buy order.
+  - `quantity (uint256)`: The number of units ordered.
+- **Description**: This event is emitted when a new buy order is placed.
+
+### `SellOrderPlaced`
+- **Parameters**:
+  - `seller (address)`: The address of the user who placed the sell order.
+  - `quantity (uint256)`: The number of units being sold.
+- **Description**: This event is emitted when a new sell order is placed.
+
+### `OrderMatched`
+- **Parameters**:
+  - `buyer (address)`: The address of the buyer whose order is matched.
+  - `seller (address)`: The address of the seller whose order is matched.
+  - `quantity (uint256)`: The number of units that were matched in the trade.
+- **Description**: This event is emitted when a **buy** and **sell** order are matched.
+
+## Functions
+
+### `placeBuyOrder`
+- **Parameters**:
+  - `_quantity (uint256)`: The number of units the buyer wants to purchase.
+- **Description**:
+  - This external payable function allows users to place buy orders.
+  - The transaction must include **ETH equivalent** to `_quantity * flatRate`.
+  - The function stores the buy order and calls `matchOrders()` to process potential matches.
+- **Error Messages**:
+  - `"Incorrect payment amount"`: Thrown when the sent ETH does not match `_quantity * flatRate`.
+
+### `placeSellOrder`
+- **Parameters**:
+  - `_quantity (uint256)`: The number of units the seller wants to sell.
+- **Description**:
+  - This external function allows users to place **sell orders**.
+  - No ETH is required for placing a sell order.
+  - The function stores the sell order and calls `matchOrders()` to attempt matching.
+
+### `matchOrders`
+- **Description**:
+  - This internal function attempts to **match buy and sell orders** in a FIFO (First-In, First-Out) manner.
+  - If a match is found:
+    - The seller receives ETH equivalent to the sold quantity (`quantity * flatRate`).
+    - The order quantities are updated accordingly.
+  - If an order is fully matched, it is removed from storage.
+- **Process**:
+  1. Check if a **buy order** and **sell order** exist.
+  2. Compare the quantities:
+    - If the **sell order's quantity** is less than or equal to the **buy order's quantity**, transfer ETH to the seller and update the buy order.
+    - If the **buy order's quantity** is less than the **sell order's quantity**, transfer ETH to the seller and update the sell order.
+  3. Emit the `OrderMatched` event.
+- **Error Handling**:
+  - Orders are automatically removed once fulfilled.
+
+### `getBuyOrders`
+- **Return**:
+  - Returns an array of `Order` structs representing **all active buy orders**.
+- **Description**:
+  - This external **view** function allows users to fetch the list of buy orders.
+
+### `getSellOrders`
+- **Return**:
+  - Returns an array of `Order` structs representing **all active sell orders**.
+- **Description**:
+  - This external **view** function allows users to fetch the list of sell orders.
+
