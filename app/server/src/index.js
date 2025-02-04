@@ -10,6 +10,7 @@ import iotRoutes from "./routes/iot.routes.js";
 >>>>>>> e38a3d0006c02fc263b1bdc0f4592d25a0aa0b97
 import companyRoutes from "./routes/company.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import { RedisGet, RedisSet } from './config/redis.js';
 
 dotenv.config();
 
@@ -22,6 +23,44 @@ export const io = new SocketIo(server, {
     methods: ["GET", "POST"],
   },
 });
+
+let socketMap = {};
+
+io.on('connection' , (socket)=>{
+    console.log(`${socket.id} connected`);
+    socket.on('subscribe' , async (iots)=>{
+        if(iots) {
+          iots.forEach(identifier => { //loop to handle all the identifiers
+          socketMap[identifier] = socket.id
+          });
+        }
+        let activities = await RedisGet({key:'activities'});
+        io.to(socket.id).emit('activities' , activities);
+    })
+
+    socket.on('trade' , async (msg)=>{
+        console.log('New Trade:',msg);
+        io.emit('trade' , msg);
+        let activities = await RedisGet({key:'activities'});
+        activities = JSON.parse(activities);
+        activities.push(msg);
+        await RedisSet({key:'activities',value:JSON.stringify(activities)});
+    })
+
+    socket.on('disconnect', () => {
+        Object.keys(socketMap).forEach(identifier => {
+            if(socketMap[identifier] === socket.id){ 
+              console.log(socket[identifier])
+              delete socketMap[identifier];
+            }
+        });
+    });
+})
+
+export async function BroadcastData(data) {
+    if(!socketMap[data.identifier]) return;
+    io.to(socketMap[data.identifier]).emit('data' , data);
+}
 
 // Middleware
 app.use(
@@ -71,7 +110,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(process.env.PORT || 8000, () => {
+    server.listen(process.env.PORT || 3000, () => {
       console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
     });
   } catch (err) {

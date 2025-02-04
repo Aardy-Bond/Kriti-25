@@ -22,7 +22,6 @@ export async function signin(req , res) {
     try {
         const {cid} = req.params;
         const file = await pinata.gateways.get(cid);
-        console.log('err')
         return res.status(200).json({message:'Success' , data:file.data});
     } catch (error) {
         console.log('Failed to get from ipfs\n',error);

@@ -8,13 +8,13 @@ export const RegisterBusiness = async ({data , formData})=>{
     const uri = `ipfs://${data.cid}`;
     try {
         const gasLimit = BigInt(await contract.methods.registerBusiness(
-            formData.user , formData.businessName , formData.sector , formData.country , uri , formData.yearOfEstablishment
+             uri 
         ).estimateGas({
             from: formData.user
         }));
         const bufferGasLimit = (gasLimit*13n)/10n;
         let receipt = await contract.methods.registerBusiness(
-            formData.user , formData.businessName , formData.sector , formData.country , uri , formData.yearOfEstablishment
+            uri 
         ).send({
             from:formData.user,
             gas:bufferGasLimit.toString()

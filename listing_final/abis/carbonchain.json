@@ -137,7 +137,7 @@
         "type": "uint256"
       }
     ],
-    "name": "Listed",
+    "name": "ListedCredits",
     "type": "event"
   },
   {
@@ -159,21 +159,12 @@
         "type": "uint256"
       }
     ],
-    "name": "Purchased",
+    "name": "PurchasedCredits",
     "type": "event"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "string", "name": "businessName", "type": "string" },
-      { "internalType": "string", "name": "sector", "type": "string" },
-      { "internalType": "string", "name": "country", "type": "string" },
-      { "internalType": "string", "name": "tokenUri", "type": "string" },
-      {
-        "internalType": "string",
-        "name": "yearOfEstablishment",
-        "type": "string"
-      }
+      { "internalType": "string", "name": "tokenUri", "type": "string" }
     ],
     "name": "registerBusiness",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],

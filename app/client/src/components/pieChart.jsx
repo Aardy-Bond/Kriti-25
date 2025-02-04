@@ -1,4 +1,4 @@
-import { Doughnut, Line } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     LineElement,
@@ -37,7 +37,7 @@ const PieChart = () => {
         <div className="flex justify-center items-center justify-center  text-white bg-[#191919] w-full rounded-lg shadow-lg">
             <div className="flex flex-col justify-center items-center text-white p-4 w-11/12 py-8 relative" >
                 {/* <p className="text-xl mb-2 font-medium">Credits Left:</p> */}
-                <p className="font-bold flex gap-2 items-center" style={{fontSize:'2rem'}}>ABC Limited <img className="w-[40px] h-[40px]" src={`https://flagsapi.com/${countryCodeMap[accData.country] || countryCodeMap['Bhutan']}/shiny/64.png`}/></p>
+                <p className="font-bold flex gap-2 items-center" style={{fontSize:'2rem'}}>{accData.businessName || "ABC Limited"} <img className="w-[40px] h-[40px]" src={`https://flagsapi.com/${countryCodeMap[accData.country] || countryCodeMap['Bhutan']}/shiny/64.png`}/></p>
                 <p className="text-right mb-2">Since {accData.yearOfEstablishment || "1999"}</p>
                 {
                     (() => {

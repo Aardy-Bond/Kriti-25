@@ -5,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../../context/context.jsx";
 import CryptoJS from "crypto-js";
 import logo from "../../assets/logo.png";
+import Dialog from "../../components/dailog.jsx";
+import Loader from "../../components/loader.jsx";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const context = useContext(Context);
-  const { setAccData } = context;
+  const [dialogProps, setDialogProps] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [loading , setLoading] = useState(false);
+  const { setAccData , accData , isConnected} = context;
 
   const [formData, setFormData] = useState({
     tokenId: 0,
@@ -31,18 +36,14 @@ const SignIn = () => {
 
   async function handleSubmit() {
     try {
-      if (!formData.tokenId) return;
-      const transaction = await SignInBusiness({ formData });
+      setLoading(true);
+      if (!formData.tokenId || !key || !accData.user) return;
+      const transaction = await SignInBusiness({ formData:{...formData , user:accData.user} });
       if (!transaction) {
         alert("Could not Sign-in");
         return;
       }
       const cid = transaction.slice(7);
-      // const response = await axios.get(`https://ipfs.io/ipfs/${cid}`,{
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      // });
       const response = await axios.get(
         `http://localhost:3000/api/v1/company/signin/${cid}`,
         {
@@ -52,16 +53,39 @@ const SignIn = () => {
         }
       );
       const dataa = handleDecrypt(response.data.data.data);
+      if(!(dataa?.user)) {
+        alert('wrong private key')
+        return;
+      }
       setAccData({ ...dataa, tokenId: formData.tokenId, key: key });
+      setLoading(false);
+      setOpenDialog(true);
+      setDialogProps({
+        msg:'Success in Registration!\nProceed to Login',
+        closefn:setOpenDialog,
+        callback:null
+      })
       navigate("/dashboard");
     } catch (error) {
       alert(`some Error Occured\n${error}`);
-      console.log("Some Error Occured\n", error);
     }
   }
 
   return (
     <>
+    {
+      loading &&
+      <div className="w-[100vw] h-[100vh] glassmorphism fixed flex justify-center items-center">
+        <Loader />
+      </div>
+    }
+    {openDialog && (
+        <Dialog
+          msg={dialogProps.msg}
+          closefn={dialogProps.closefn}
+          callback={dialogProps.callback}
+        />
+      )}
       <div className="flex w-[100vw]">
         <div className="col1">
           <img src={logo} alt="" />
@@ -72,6 +96,15 @@ const SignIn = () => {
 
           <form className="create" onSubmit={(e)=>{
             e.preventDefault();
+            if(!isConnected) {
+              setOpenDialog(true);
+              setDialogProps({
+                msg: `Connect to your Wallet!`,
+                closefn: setOpenDialog,
+                callback: null,
+              });
+              return
+            }
             handleSubmit();
           }}>
             <label>Enter your Token Id</label>
@@ -81,13 +114,13 @@ const SignIn = () => {
               onChange={handleChange}
               required
             />
-            <label>Enter your Wallet Address</label>
+            {/* <label>Enter your Wallet Address</label>
 
-            <input style={{margin:'10px 0px'}} type="text" name="user" onChange={handleChange} required />
+            <input style={{margin:'10px 0px'}} type="text" name="user" onChange={handleChange} required /> */}
             <label>Enter your Password</label>
             <input style={{margin:'10px 0px'}}
               type="text"
-              name="private_key"
+              name="key"
               onChange={(e) => {
                 setKey(e.target.value);
               }}

@@ -1,18 +1,18 @@
 import {
   ApprovalForAll as ApprovalForAllEvent,
-  Listed as ListedEvent,
-  Purchased as PurchasedEvent,
+  ListedCredits as ListedCreditsEvent,
+  PurchasedCredits as PurchasedCreditsEvent,
   RoleAdminChanged as RoleAdminChangedEvent,
   RoleGranted as RoleGrantedEvent,
   RoleRevoked as RoleRevokedEvent,
   TransferBatch as TransferBatchEvent,
   TransferSingle as TransferSingleEvent,
   URI as URIEvent
-} from "../generated/main/main"
+} from "../generated/carbonchain/carbonchain"
 import {
   ApprovalForAll,
-  Listed,
-  Purchased,
+  ListedCredits,
+  PurchasedCredits,
   RoleAdminChanged,
   RoleGranted,
   RoleRevoked,
@@ -36,8 +36,8 @@ export function handleApprovalForAll(event: ApprovalForAllEvent): void {
   entity.save()
 }
 
-export function handleListed(event: ListedEvent): void {
-  let entity = new Listed(
+export function handleListedCredits(event: ListedCreditsEvent): void {
+  let entity = new ListedCredits(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.listId = event.params.listId
@@ -52,8 +52,8 @@ export function handleListed(event: ListedEvent): void {
   entity.save()
 }
 
-export function handlePurchased(event: PurchasedEvent): void {
-  let entity = new Purchased(
+export function handlePurchasedCredits(event: PurchasedCreditsEvent): void {
+  let entity = new PurchasedCredits(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.listId = event.params.listId

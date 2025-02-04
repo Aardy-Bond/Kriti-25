@@ -10,7 +10,7 @@ export const GetCredits=async({iot,address}) =>{
             from:address
         });
         console.log('Transaction Successful',credits);
-        return sum;
+        return credits;
     } catch (error) {
         console.log('Transaction failed to fetch carbon credits',error);
         return false;
