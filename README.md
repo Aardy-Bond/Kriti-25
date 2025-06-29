@@ -19,7 +19,7 @@
 #### An account on IPFS and PinataSDK
 #### Either MongoDB should be available on your local or make a account in MongoAtlas to use it without dowloading
 #### Account on Cloudinary for saving uploaded files
-#### Should have a crypto wallet(like Metamask) with some sepolia in it
+#### Should have a crypto wallet (like Metamask) with some sepolia in it
 #### An ESP32 microcontroller setup connected to a computer for running the Arduino code
 #### An Account in the HiveMQ-A MQTT Broker Cloud
 #### Arduino IDE installed on the computer with which the ESP32 microcontroller will be connected using MicroUSB cable
