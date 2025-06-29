@@ -1,9 +1,11 @@
 
 # CarbonX
-#### About CarbonX
 
-## Complete Idea with a Business Model and Go-To Market Strategy
-#### Here's a [ppt](https://github.com/) about the entire project
+## The app is deployed at: [carbonX](https://carbonx-alpha.vercel.app/)
+## The presentation: [deck](https://drive.google.com/file/d/1XRup8OmFnIvaC17sVyAXM6GBqSqb5rKg/view?usp=sharing)
+## Demo Video: [demo](https://drive.google.com/file/d/1_iD6_qgrUpQsuB8aJfvESR7i2JJOaHEg/view?usp=drive_link)
+
+#### A decentralized energy distribution system that enables direct peer-to-peer energy trading, verifiable carbon credit transactions, and efficient smart grid management while ensuring equitable market participation and environmental sustainability
 #### To read all the documentations and work flow refer to the ['docs'](https://github.com/Aardy-Bond/Kriti-25/tree/main/docs) directory
 
 ## 💻 TechStack Used
